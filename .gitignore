@@ -1,0 +1,26 @@
+# Byte-compiled Python files
+__pycache__
+
+# Streamlit configuration files
+.streamlit/secrets.toml
+.streamlit/config.toml
+
+# Environment variables file
+.env
+
+
+# Exported files
+.exports
+exports
+
+# Log files
+*.log
+
+# Database files
+*.db
+
+# Image files
+*.png
+
+# Cache directory
+cache

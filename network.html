@@ -1,0 +1,148 @@
+<html>
+
+<head>
+    <meta charset="utf-8">
+
+    <script src="lib/bindings/utils.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css"
+        integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js"
+        integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+
+    <center>
+        <h1></h1>
+    </center>
+
+    <!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous" />
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+        crossorigin="anonymous"></script>
+
+
+    <center>
+        <h1></h1>
+    </center>
+    <style type="text/css">
+        #mynetwork {
+            width: 100%;
+            height: 600px;
+            background-color: white;
+            border: 1px solid lightgray;
+            position: relative;
+            float: left;
+        }
+    </style>
+</head>
+
+
+<body>
+    <div class="card" style="width: 100%">
+
+
+        <div id="mynetwork" class="card-body"></div>
+    </div>
+
+
+
+
+    <script type="text/javascript">
+
+        // initialize global variables.
+        var edges;
+        var nodes;
+        var allNodes;
+        var allEdges;
+        var nodeColors;
+        var originalNodes;
+        var network;
+        var container;
+        var options, data;
+        var filter = {
+            item: '',
+            property: '',
+            value: []
+        };
+
+
+
+
+
+        // This method is responsible for drawing the graph, returns the drawn network
+        function drawGraph() {
+            var container = document.getElementById('mynetwork');
+
+
+
+            // parsing and collecting nodes and edges from the python
+            nodes = new vis.DataSet([{ "group": "Site", "id": "-2565", "label": "Site", "shape": "dot", "title": "siteSpatialDescription\nsiteIdDescriptor\nsiteNativeVegetation\npostalCodeNumber\nsiteHistory\nsiteId\nmajorLandResourceArea" }, { "group": "WeatherStation", "id": "-2569", "label": "WeatherStation", "shape": "dot", "title": "weatherStationId" }, { "group": "ResidueManagementEvent", "id": "-2587", "label": "ResidueManagementEvent", "shape": "dot", "title": "residuePerennialStandAge\nresidueRemovalDate\nresidueHarvestEquipment\nresidueCrop\nresidueRowsHarvestedPercent\nresidueStageAtHarvest\nmgtResidue_UID\nresidueCuttingHeight" }, { "group": "Organization", "id": "-2561", "label": "Organization", "shape": "dot", "title": "organizationName" }, { "group": "BioMassEnergy", "id": "-2581", "label": "BioMassEnergy", "shape": "dot", "title": "plantFractionMineralMatterStd\nbiomassEnergyPlantFraction\nbiomassEnergyDate\nbiomassEnergyGrowthStage\nbiomassEnergyCrop\nplantFractionVolatileMatter\nplantFractionVolatileMatterStd\nplantFractionGrossCalorificValueStd\nplantFractionMineralMatter\nmeasBiomassEnergy_UID\nplantFractionGrossCalorificValue" }, { "group": "PlantingEvent", "id": "-2575", "label": "PlantingEvent", "shape": "dot", "title": "plantingRowWidth\nplantingMethod\nplantingRate\nplantingDensity\nplantingDepth\nmgtPlanting_UID\nplantingCultivar\nplantingDate" }, { "group": "County", "id": "-2556", "label": "County", "shape": "dot", "title": "countyName" }, { "group": "Harvest", "id": "-2579", "label": "Harvest", "shape": "dot", "title": "nonHarvestedResidueCarbonContentStd\nnonHarvestedResidueMass\nharvestedResidueNitrogenStd\nnonHarvestedResidueCarbonContent\nharvestedResidueMoisturePercentStd\nharvestedResidueNitrogen\nharvestedResidueCarbonStd\nharvestedResidueMoisturePercent\nharvestedGrainYieldStd\nharvestedResidueCarbon\nharvestedGrainNitrogenStd\nharvestedGrainYield\nharvestedGrainCarbonStd\nharvestedGrainNitrogen\nharvestedFrac\nharvestedGrainCarbon\nharvestUnitGrainWeight\nharvestUnitGrainWeightStd\nharvestCornEarHeight\nharvestCornEarHeightStd\nharvestAboveGroundBiomass\nharvestAboveGroundBiomassStd\ngrainMoisturePercent\ngrainMoisturePercentStd\nnonHarvestedResidueMoisturePercentStd\nmeasResidueMgnt_UID\nharvestedCrop\nharvestDate\nharvestGrowthStage\ndriedHarvestedResidue\ndriedHarvestedResidueStd\nrootNitrogenContent\nrootNitrogenContentStd\nrootMoisturePercent\nrootMoisturePercentStd\nrootDryMatter\nrootDryMatterStd\nrootCarbonContent\nrootCarbonContentStd\nnonHarvestedResidueNitrogenContent\nnonHarvestedResidueNitrogenContentStd\nnonHarvestedResidueMassStd\nnonHarvestedResidueMoisturePercent" }, { "group": "Field", "id": "-2560", "label": "Field", "shape": "dot", "title": "fieldLatitude\nfieldLongitude\nfieldId\nfieldElevation" }, { "group": "SoilChemicalSample", "id": "-2577", "label": "SoilChemicalSample", "shape": "dot", "title": "totalSoilNitrogen\ntotalSoilNitrogenStd\ntotalSoilCarbon\ntotalSoilCarbonStd\nsolubleOrganicCarbon\nsolubleOrganicCarbonStd\nsoilPotassium\nsoilPotassiumStd\nsoilPhosphorus\nsoilPhosphorusStd\nsoilPh\nsoilPhStd\nsoilOrganicCarbon\nsoilOrganicCarbonStd\nsoilNitrites\nsoilNitritesStd\nsoilNitrate\nsoilNitrateStd\nsoilMineralCarbon\nsoilMineralCarbonStd\nsoilInorganicCarbon\nsoilInorganicCarbonStd\nsoilExtractableZinc\nsoilExtractableZincStd\nsoilExtractableManganese\nsoilExtractableManganeseStd\nsoilExtractableMagnesium\nsoilExtractableMagnesiumStd\nsoilExtractableIron\nsoilExtractableIronStd\nsoilExtractableCopper\nsoilExtractableCopperStd\nsoilExtractableCalcium\nsoilExtractableCalciumStd\nsoilElectricalConductivity\nsoilElectricalConductivityStd\nsoilChemLowerDepth\nsoilChemUpperDepth\nsoilAmmoniumStd\nsoilChemDate\nmineralizableNitrogenStd\nsoilAmmonium\ncationExchangeCapacityStd\nmineralizableNitrogen\nmeasSoilChem_UID\ncationExchangeCapacity" }, { "group": "BioMassMineral", "id": "-2582", "label": "BioMassMineral", "shape": "dot", "title": "biomassMineralDate\nbiomassMinAnGrowthStage\nplantFractionZincConcentration\nplantFractionZincConcentrationStd\nplantFractionSulfurConcentration\nplantFractionSulfurConcentrationStd\nplantFractionPotassiumConcentrationStd\nplantFractionSodiumConcentrationStd\nplantFractionPhosphorusConcentrationStd\nplantFractionPotassiumConcentration\nplantFractionNitrogenConcentrationStd\nplantFractionPhosphorusConcentration\nplantFractionManganeseConcentrationStd\nplantFractionNitrogenConcentration\nplantFractionMagnesiumConcentrationStd\nplantFractionManganeseConcentration\nplantFractionIronConcentrationStd\nplantFractionMagnesiumConcentration\nplantFractionCopperConcentrationStd\nplantFractionCopperConcentration\nbiomassMineralCrop\nplantFractionChlorineConcentration\nplantFractionChlorineConcentrationStd\nplantFractionCarbonConcentration\nplantFractionCarbonConcentrationStd\nplantFractionCalciumConcentration\nplantFractionCalciumConcentrationStd\nplantFractionBoronConcentration\nplantFractionBoronConcentrationStd\nplantFractionAluminumConcentration\nplantFractionAluminumConcentrationStd\nplantFractionIronConcentration\nmeasBiomassMinAn_UID\nbiomassMinAnPlantFraction" }, { "group": "Department", "id": "-2557", "label": "Department", "shape": "dot", "title": "departmentName" }, { "group": "Amendment", "id": "-2573", "label": "Amendment", "shape": "dot", "title": "totalAmendmentAmount\namendmentTotalPhosphorusAmount\namendmentTotalPotassiumAmount\namendmentPlacement\namendmentType\namendmentIrrigationType\namendmentTotalNitrogenAmount\namendmentIrrigationAmount\namendmentIrrigationNitrogen\namendmentDate\namendmentDepth\nmgtAmendments_UID\namendmentCrop" }, { "group": "Pesticide", "id": "-2574", "label": "Pesticide", "shape": "dot", "title": "pesticidePlacement\npesticide_UID\npesticideActiveIngredientType\ntotalPesticideAmount\npesticideTarget" }, { "group": "Version", "id": "-2567", "label": "Version", "shape": "dot", "title": "versionDate" }, { "group": "Tillage", "id": "-2571", "label": "Tillage", "shape": "dot", "title": "tillageEventDepth\ntillageEventMethod\ntillageDate\ntillageEvent\nmgtTillage_UID\ntillageCrop" }, { "group": "HarvestFraction", "id": "-2586", "label": "HarvestFraction", "shape": "dot", "title": "harvestFractionSamplingDate\ncropPlantFraction\nplantFractionNitrogen\nplantFractionNitrogenStd\nplantFractionMoisturePercent\nplantFractionMoisturePercentStd\nharvestFractionPlantFraction\nplantFractionDryBiomassStd\nplantFractionCarbonStd\nplantFractionDryBiomass\ngrainWeightStd\nplantFractionCarbon\nmeasHarvestFraction_UID\ngrainWeight\nharvestFractionGrowthStage" }, { "group": "Book", "id": "-2590", "label": "Book", "shape": "dot", "title": "bookName" }, { "group": "WeatherObservation", "id": "-2568", "label": "WeatherObservation", "shape": "dot", "title": "closedPanEvaporation\nweatherObservationDate\natmosphericNitrogenDeposition\nwindDirectionDegFromNorth\nweatherBadValueFlag\ntempMax\ntempMin\nsolarRadiationBareSoil\nsolarRadiationVegetatedGround\nsoilTemp10cm\nsoilTemp5cm\nrelativeHumidityPercent\nsnow\nprecipitation\nopenPanEvaporation\nweatherDaily_UID" }, { "group": "GrazingManagementEvent", "id": "-2585", "label": "GrazingManagementEvent", "shape": "dot", "title": "grazingYearsBetweenBurns\ngrazingStartDate\ngrazingStockingRate\ngrazingEndDate\ngrazingOtherEvents\ngrazingAnimalSpecies\ngrazingBurnIntensity\nmgtGrazing_UID\ngrazingAnimalClass" }, { "group": "CropGrowthStage", "id": "-2589", "label": "CropGrowthStage", "shape": "dot", "title": "cropGrowthStage\ncropGrowthStageDate\ncropName\nmgtGrowthStages_UID" }, { "group": "Experiment", "id": "-2558", "label": "Experiment", "shape": "dot", "title": "experimentName\nprojectName\nexperimentEndDate\nexperimentStartDate" }, { "group": "GasSample", "id": "-2583", "label": "GasSample", "shape": "dot", "title": "soilTemperatureStd\ngasSampleCrop\nsoilMoisturePercentStd\nsoilTemperature\nnitrousOxideStd\nsoilMoisturePercent\nmethaneStd\nnitrousOxide\nisMethaneInterpolated\nisNitrousOxideInterpolated\nmethane\ngasSamplingDate\ngasSamplingTime\ncarbonDioxideStd\ngasSamplingChamberPlacement\nairTemperatureStd\ncarbonDioxide\nmeasGHGFlux_UID\nairTemperature\nisCarbonDioxideInterpolated" }, { "group": "SoilCover", "id": "-2588", "label": "SoilCover", "shape": "dot", "title": "soilCoverDate\nmeasSoilCover_UID\nsoilWithResidueCoverPercent\nsoilCoverTimingDescriptor" }, { "group": "Publication", "id": "-2564", "label": "Publication", "shape": "dot", "title": "publicationDate\npublicationCitation\npublicationCorrespondingAuthor\npublicationIdentifier\npublicationType\npublicationAuthor\npublicationDescription\npublicationTitle" }, { "group": "SoilBiologicalSample", "id": "-2576", "label": "SoilBiologicalSample", "shape": "dot", "title": "soilBiolDate\nsoilAlkPhosphatase\nsoilAlkPhosphataseStd\nsoilAcidPhosphatase\nsoilAcidPhosphataseStd\nsoilParticulateOrganicMatterStd\nmeasSoilBiol_UID\nsoilOrganicPlantMaterialStd\nsoilParticulateOrganicMatter\nsoilNitrogenMicrobialBiomassStd\nsoilOrganicPlantMaterial\nsoilGlucosidaseStd\nsoilNitrogenMicrobialBiomass\nsoilGlomalinStd\nsoilGlucosidase\nsoilFluoresceinDiacetateHydrolStd\nsoilGlomalin\nsoilCarbonMicrobialBiomassStd\nsoilFluoresceinDiacetateHydrol\nsoilBiolLowerDepth\nsoilBiolUpperDepth\nsoilCarbonMicrobialBiomass" }, { "group": "ExperimentalUnit", "id": "-2559", "label": "ExperimentalUnit", "shape": "dot", "title": "expUnitChangeInManagement\nexpUnitEndDate\nexpUnitId\nexpUnit_UID" }, { "group": "City", "id": "-2554", "label": "City", "shape": "dot", "title": "cityName" }, { "group": "SoilPhysicalSample", "id": "-2578", "label": "SoilPhysicalSample", "shape": "dot", "title": "wiltingPointPercent\nwiltingPointStd\nwaterStableAggregatePercent\nwaterStableAggregatesPercentStd\nsoilPhysLowerDepth\nsoilPhysUpperDepth\nsoilHeatFluxStd\nsoilPhysDate\nsiltPercent\nsoilHeatFlux\nsaturatedHydraulicConductivity\nsaturatedHydraulicConductivityStd\nnearInfraredCarbonStd\nsandPercent\nmoistureReleaseCurve\nnearInfraredCarbon\nfieldCapacityPercentStd\nmacroAggregatesPercentStd\nclayPercent\nfieldCapacityPercent\nbulkDensity\nbulkDensityStd\nmeasSoilPhys_UID\naggregationPercent" }, { "group": "Grazing", "id": "-2584", "label": "Grazing", "shape": "dot", "title": "grazingPlantLigninPercentageStd\ngrazingPlantLeafAreaIndexDryStd\ngrazingPlantLigninPercentage\ngrazingPlantGrowthStage\ngrazingPlantLeafAreaIndexDry\ngrazingPlantGroundCoverPercentage\ngrazingPlantGroundCoverPercentageStd\ngrazingPlantBiomassNitrogenPercentageStd\ngrazingPlantBroadleafOrGrass\ngrazingPlantBelowgroundNetPrimaryProductivityNitrogenStd\ngrazingPlantBiomassNitrogenPercentage\ngrazingPlantBelowgroundNetPrimaryProductivityCarbonStd\ngrazingPlantBelowgroundNetPrimaryProductivityNitrogen\ngrazingPlantBelowGroundBiomassNitrogenStd\ngrazingPlantBelowgroundNetPrimaryProductivityCarbon\ngrazingPlantBelowGroundBiomassCarbonStd\ngrazingPlantBelowGroundBiomassNitrogen\ngrazingPlantAbovegroundNetPrimaryProductivityNitrogenStd\ngrazingPlantBelowGroundBiomassCarbon\ngrazingPlantAbovegroundNetPrimaryProductivityCarbonStd\ngrazingPlantAbovegroundNetPrimaryProductivityNitrogen\ngrazingPlantAboveGroundBiomassNitrogenStd\ngrazingPlantAbovegroundNetPrimaryProductivityCarbon\ngrazingPlantAboveGroundBiomassDry\ngrazingPlantAboveGroundBiomassNitrogen\ngrazingPlantAboveGroundBiomassCarbon\ngrazingPlantAboveGroundBiomassCarbonStd\ngrazingPlantAboveGroundBiomassDryStd\nmeasGrazingPlants_UID\ngrazingPlantSurfaceLitterDryStd\ngrazingDate\ngrazingPlantStandingDeadDryStd\ngrazingPlantSurfaceLitterDry\ngrazingPlantSpeciesMix\ngrazingPlantStandingDeadDry" }, { "group": "Rotation", "id": "-2570", "label": "Rotation", "shape": "dot", "title": "rotationDescriptor" }, { "group": "Project", "id": "-2563", "label": "Project", "shape": "dot", "title": "projectName" }, { "group": "Treatment", "id": "-2572", "label": "Treatment", "shape": "dot", "title": "treatmentStartDate\ntreatmentProjectScenario\ntreatmentResidueRemoval\nnitrogenTreatmentDescriptor\ntreatmentDescriptor\ngrazingRate\nirrigation\ntreatmentOrganicManagement\ntreatmentId\ncoverCrop\nfertilizerAmendmentClass\ntillageDescriptor" }, { "group": "State", "id": "-2566", "label": "State", "shape": "dot", "title": "stateName" }, { "group": "Country", "id": "-2555", "label": "Country", "shape": "dot", "title": "countryName" }, { "group": "BioMassCarbohydrate", "id": "-2580", "label": "BioMassCarbohydrate", "shape": "dot", "title": "plantFractionXylanStd\nplantFractionNonFiberCarbsStd\nplantFractionXylan\nplantFractionNeutralDetFiberStd\nplantFractionNonFiberCarbs\nplantFractionMannanStd\nplantFractionNeutralDetFiber\nplantFractionLigninStd\nplantFractionMannan\nplantFractionGlucanStd\nplantFractionLignin\nplantFractionGalactanStd\nplantFractionGlucan\nplantFractionCrudeProtein\nplantFractionGalactan\nplantFractionAsh\nplantFractionAshStd\nplantFractionArabinan\nplantFractionArabinanStd\nplantFractionAcidSolubleLignin\nplantFractionAcidSolubleLigninStd\nplantFractionCrudeProteinStd\nplantFractionAcidInsolubleLigninStd\nplantFractionAcidDetFiberStd\nplantFractionAcidInsolubleLignin\nbiomassCarbohydratePlantFraction\nplantFractionAcidDetFiber\nbiomassCarbohydrateDate\nbiomassCarbohydrateGrowthStage\nbiomassCarbohydrateCrop\nmeasBiomassCHO_UID" }, { "group": "Person", "id": "-2562", "label": "Person", "shape": "dot", "title": "persons_UID\nprofession\nsuffix\npersonWebsite\nphoneNumber\nroleInStudy\nmiddleName\npersonNote\nfirstName\nlastName\nemail\nisPrimaryContact" }]);
+            edges = new vis.DataSet([{ "from": "-2558", "title": "hasTreatment", "to": "-2572" }, { "from": "-2557", "title": "departmentOf", "to": "-2561" }, { "from": "-2559", "title": "hasChemSample", "to": "-2577" }, { "from": "-2575", "title": "plantingAt", "to": "-2559" }, { "from": "-2559", "title": "hasBioSample", "to": "-2576" }, { "from": "-2559", "title": "hasGrazingManagementEvent", "to": "-2585" }, { "from": "-2569", "title": "recordsWeatherForSite", "to": "-2565" }, { "from": "-2559", "title": "hasBioMassCarbohydrateData", "to": "-2580" }, { "from": "-2564", "title": "studiesSite", "to": "-2565" }, { "from": "-2559", "title": "hasBioMassMineralData", "to": "-2582" }, { "from": "-2559", "title": "hasBioMassEnergyData", "to": "-2581" }, { "from": "-2572", "title": "hasRotation", "to": "-2570" }, { "from": "-2559", "title": "hasGrazingData", "to": "-2584" }, { "from": "-2565", "title": "locatedInCounty", "to": "-2556" }, { "from": "-2561", "title": "fundsExperiment", "to": "-2558" }, { "from": "-2558", "title": "happenedInSite", "to": "-2565" }, { "from": "-2572", "title": "appliedInExpUnit", "to": "-2559" }, { "from": "-2559", "title": "hasAmendment", "to": "-2573" }, { "from": "-2573", "title": "hasPesticide", "to": "-2574" }, { "from": "-2559", "title": "hasGasSample", "to": "-2583" }, { "from": "-2565", "title": "locatedInState", "to": "-2566" }, { "from": "-2559", "title": "tracksGrowth", "to": "-2589" }, { "from": "-2569", "title": "recordsWeatherForField", "to": "-2560" }, { "from": "-2556", "title": "hasCity", "to": "-2554" }, { "from": "-2565", "title": "locatedInCountry", "to": "-2555" }, { "from": "-2559", "title": "hasResidueManagementEvent", "to": "-2587" }, { "from": "-2555", "title": "hasState", "to": "-2566" }, { "from": "-2566", "title": "hasCounty", "to": "-2556" }, { "from": "-2559", "title": "hasTillage", "to": "-2571" }, { "from": "-2565", "title": "locatedInCity", "to": "-2554" }, { "from": "-2568", "title": "weatherAtField", "to": "-2560" }, { "from": "-2559", "title": "locatedInField", "to": "-2560" }, { "from": "-2559", "title": "hasPhySample", "to": "-2578" }, { "from": "-2559", "title": "isHarvested", "to": "-2579" }, { "from": "-2559", "title": "hasHarvestFractionData", "to": "-2586" }, { "from": "-2565", "title": "hasField", "to": "-2560" }]);
+
+            nodeColors = {};
+            allNodes = nodes.get({ returnType: "Object" });
+            for (nodeId in allNodes) {
+                nodeColors[nodeId] = allNodes[nodeId].color;
+            }
+            allEdges = edges.get({ returnType: "Object" });
+            // adding nodes and edges to the graph
+            data = { nodes: nodes, edges: edges };
+
+            var options = {
+                "configure": {
+                    "enabled": false
+                },
+                "edges": {
+                    "color": {
+                        "inherit": true
+                    },
+                    "smooth": {
+                        "enabled": true,
+                        "type": "dynamic"
+                    }
+                },
+                "interaction": {
+                    "dragNodes": true,
+                    "hideEdgesOnDrag": false,
+                    "hideNodesOnDrag": false
+                },
+                "physics": {
+                    "enabled": true,
+                    "stabilization": {
+                        "enabled": true,
+                        "fit": true,
+                        "iterations": 1000,
+                        "onlyDynamicEdges": false,
+                        "updateInterval": 50
+                    }
+                }
+            };
+
+
+
+
+
+
+            network = new vis.Network(container, data, options);
+
+
+
+
+
+
+
+
+
+
+            return network;
+
+        }
+        drawGraph();
+    </script>
+</body>
+
+</html>
