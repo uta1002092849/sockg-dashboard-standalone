@@ -1,0 +1,6 @@
+[mapbox]
+token = "pk.eyJ1IjoiYWNvcm4yNyIsImEiOiJjbHhkcTRsMDMwOWs3Mmpwc3Q2djc2dDBhIn0.u_GSXcl_JI8c8ZylQx5Qqg"
+
+
+[client]
+showSidebarNavigation = false
