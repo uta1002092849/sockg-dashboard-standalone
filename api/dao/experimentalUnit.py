@@ -128,3 +128,31 @@ class ExperimentalUnitDAO:
         
         with self.driver.session() as session:
             return session.execute_read(get_biological_properties)
+    
+    # Get filter information for an experimental unit
+    def get_filters(self):
+        def get_filters(tx):
+            cypher = """MATCH (expUnit:ExperimentalUnit)-[:locatedInField]->(field:Field)<-[:hasField]-(site:Site)
+                        OPTIONAL MATCH (site)-[:locatedInCity]->(city:City)
+                        OPTIONAL MATCH (site)-[:locatedInCountry]->(country:Country)
+                        OPTIONAL MATCH (site)-[:locatedInCounty]->(county:County)
+                        OPTIONAL MATCH (site)-[:locatedInState]->(state:State)
+                        RETURN
+                        expUnit.expUnitId AS experimentalUnitId,
+                        COALESCE(expUnit.expUnitStartDate, "unk") AS startDate,
+                        COALESCE(expUnit.expUnitEndDate, "unk") AS endDate,
+                        field.fieldId AS fieldId,
+                        COALESCE(field.fieldLongitude_decimal_deg, "unk") AS fieldLongitude,
+                        COALESCE(field.fieldLatitude_decimal_deg, "unk") AS fieldLatitude,
+                        site.siteId AS siteId,
+                        COALESCE(site.postalCodeNumber, 'unk') AS sitePostalCode,
+                        COALESCE(site.siteSpatialDescription, 'unk') AS siteSpatialDescription,
+                        COALESCE(city.cityName, 'unk') AS cityName,
+                        COALESCE(county.countyName, 'unk') AS countyName,
+                        COALESCE(state.stateProvince, "unk") AS stateName,
+                        COALESCE(country.countryName, 'unk') AS countryName"""
+            result = tx.run(cypher)
+            return result.to_df()
+        
+        with self.driver.session() as session:
+            return session.execute_read(get_filters)
