@@ -156,3 +156,39 @@ class ExperimentalUnitDAO:
         
         with self.driver.session() as session:
             return session.execute_read(get_filters)
+    
+    # Get total number of samples nodes connected to an experimental unit
+    def get_sample_count(self, expUnit_id, sample_type):
+        def get_sample_count(tx):
+            cypher = """MATCH (u:ExperimentalUnit {expUnitId: $expUnit_id})-[]-(s)
+                        WHERE ANY(label IN labels(s) WHERE label = $sample_type)
+                        RETURN count(s) as count"""
+            result = tx.run(cypher, expUnit_id=expUnit_id, sample_type=sample_type)
+            return int(result.single()["count"])
+        
+        with self.driver.session() as session:
+            return session.execute_read(get_sample_count)
+    
+    # Get the count of all samples connected to an experimental unit
+    def get_all_measurement_sample_counts(self, expUnit_id):
+        samples = ["GasSample", "SoilBiologicalSample", "BioMassEnergy", "SoilChemicalSample", "SoilPhysicalSample", "GasNutrientLoss", "BioMassCarbohydrate", "BioMassMineral"]
+        sample_counts = {}
+        for sample in samples:
+            sample_counts[sample] = self.get_sample_count(expUnit_id, sample)
+        return sample_counts
+        
+    # Get the count of all planting and harvest samples connected to an experimental unit
+    def get_all_planting_and_harvesting_sample_counts(self, expUnit_id):
+        samples = ["Grazing","HarvestFraction", "PlantingEvent", "CropGrowthStage", "Harvest"]
+        sample_counts = {}
+        for sample in samples:
+            sample_counts[sample] = self.get_sample_count(expUnit_id, sample)
+        return sample_counts
+
+    # Get all management events applied to an experimental unit
+    def get_all_mamagement_events(self, expUnit_id):
+        samples = ["Amendment", "Tillage", "ResidueManagementEvent","GrazingManagementEvent"]
+        sample_counts = {}
+        for sample in samples:
+            sample_counts[sample] = self.get_sample_count(expUnit_id, sample)
+        return sample_counts
