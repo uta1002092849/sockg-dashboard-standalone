@@ -147,39 +147,26 @@ def display_experimental_unit(filtered_data, exp_unit_info, selected_exp_unit):
     st.session_state.selected_exp_unit = filtered_data.loc[selected_exp_unit[0], "Experimental Unit ID"]
     if not st.session_state.selected_exp_unit:
         return
-
-    cols = st.columns(2)
-    with cols[0]:
-        st.info(f"Selected Experimental Unit: {st.session_state.selected_exp_unit}")
-    
-    with cols[1]:
-        display_spatial_info(exp_unit_info)
+    display_spatial_info(exp_unit_info)
 
 def display_spatial_info(exp_unit_info):
     site_spatial_description = str(get_spatial_description(exp_unit_info))
 
     if site_spatial_description.startswith('Bounding Box:'):
-        display_bounding_box_map(site_spatial_description)
-    else:
-        if site_spatial_description == 'nan':
-            st.info("No spatial information available.")
-        else:
-            st.info(f"Site Spatial Description: {site_spatial_description}")
+        coordinates = parse_bounding_box(site_spatial_description)
+        if coordinates and not any(coord[0] < -180 or coord[0] > 180 or coord[1] < -90 or coord[1] > 90 for coord in coordinates):
+            fig = create_mapbox_figure(coordinates)
+            st.plotly_chart(fig, use_container_width=True)
+            return
+    elif (site_spatial_description != 'nan'):
+        st.info(f"Site Spatial Description: {site_spatial_description}")
+        return
+    st.info("No spatial information available for the selected experimental unit.")
+    st.image("not_found_2.jpg", use_column_width='auto')
 
 def get_spatial_description(exp_unit_info):
     return exp_unit_info[exp_unit_info['experimentalUnitId'] == st.session_state.selected_exp_unit]['siteSpatialDescription'].values[0]
-
-def display_bounding_box_map(site_spatial_description):
-    coordinates = parse_bounding_box(site_spatial_description)
-    if not coordinates:
-        st.error("Failed to parse bounding box coordinates.")
-        return
-    # Check if the longitude and latitude are valid
-    if any(coord[0] < -180 or coord[0] > 180 or coord[1] < -90 or coord[1] > 90 for coord in coordinates):
-        st.info("No spatial information available.")
-        return
-    fig = create_mapbox_figure(coordinates)
-    st.plotly_chart(fig)
+    
 
 def parse_bounding_box(site_spatial_description):
     try:
@@ -206,34 +193,21 @@ def create_mapbox_figure(coordinates):
     return fig
 
 def create_pie_chart(data):
-    # remove all samples with count 0
-    data = {k: v for k, v in stats.items() if v > 0}
-    # Check if there are any samples
-    fig = None
-    if data:
-
-        # Display the sample counts
-        fig = px.pie(
-            values=list(data.values()),
-            names=list(data.keys()),
-        )
+    fig = px.pie(
+        values=list(data.values()),
+        names=list(data.keys()),
+    )
     return fig
 
 # Display the table of experimental units qualified by the filters
-st.subheader("Experimental Units")
+st.subheader("Filtered Experimental Units")
 # check if filters are applied
 if st.session_state.filters['stateNameFull'] or st.session_state.filters['countyName'] or st.session_state.filters['siteId'] or st.session_state.filters['fieldId']:
-    # Group city, county, state, and country into a single column
     filtered_data['Location'] = filtered_data[['cityName', 'countyName', 'stateNameFull', 'countryName']].agg(', '.join, axis=1)
-    # reset index before displaying the table
     filtered_data = filtered_data.reset_index(drop=True)
-    # Only keep experimentalUnitId, startDate, endDate, fieldId siteId, Location
     filtered_data = filtered_data[['experimentalUnitId', 'startDate', 'endDate', 'fieldId', 'siteId', 'Location']]
-    # Rename columns
     filtered_data.columns = ['Experimental Unit ID', 'Start Date', 'End Date', 'Field ID', 'Site ID', 'Location']
-    # Replace None with 'Not Available'
     filtered_data = filtered_data.fillna('Not Available')
-    # Display total number of experimental units found for the current filters
     st.info(f"Total Experimental Units Found: {filtered_data.shape[0]}")
     
     events = st.dataframe(filtered_data, 
@@ -243,29 +217,66 @@ if st.session_state.filters['stateNameFull'] or st.session_state.filters['county
 
     selected_exp_unit = events.selection.rows
     if selected_exp_unit:
-        display_experimental_unit(filtered_data, exp_unit_info, selected_exp_unit)
-
-
-        tabs = st.tabs(["Measurement Samples", "Planting and Harvesting Samples"])
-        with tabs[0]:
-            # Get all samples connected to the selected experimental unit count
-            stats = exp_unit_dao.get_all_measurement_sample_counts(st.session_state.selected_exp_unit)
-            fig = create_pie_chart(stats)
-            if fig:
-                st.plotly_chart(fig)
-            else:
-                st.info("No measurement sample found for the selected experimental unit.")
-        with tabs[1]:
-            # Get all planting and harvest samples connected to the selected experimental unit count
-            stats = exp_unit_dao.get_all_planting_and_harvesting_sample_counts(st.session_state.selected_exp_unit)
-            fig = create_pie_chart(stats)
-            if fig:
-                st.plotly_chart(fig)
-            else:
-                st.info("No planting and harvesting sample found for the selected experimental unit.")
-
-        # Get management events applied to the selected experimental unit
-        management_events = exp_unit_dao.get_all_mamagement_events(st.session_state.selected_exp_unit)
-        st.dataframe(management_events, use_container_width=True)
+        st.info(f"Selected Experimental Unit: {filtered_data.loc[selected_exp_unit[0], 'Experimental Unit ID']}")
+        cols = st.columns(2)
+        events = {}
+        with cols[0]:
+            st.subheader("Geographical Location")
+            display_experimental_unit(filtered_data, exp_unit_info, selected_exp_unit)
+        with cols[1]:
+            st.subheader("Data Sample Counts")
+            tabs = st.tabs(["Measurement Events", "Planting and Harvesting Events", "Management Events"])
+            with tabs[0]:
+                stats = exp_unit_dao.get_all_measurement_sample_counts(st.session_state.selected_exp_unit)
+                stats = {k: v for k, v in stats.items() if v > 0}
+                if not stats:
+                    st.info("No measurement sample found for the selected experimental unit.")
+                else:
+                    events["Measurement Events"] = []
+                    for event_type in stats:
+                        events["Measurement Events"].append(event_type)
+                    fig = create_pie_chart(stats)
+                    st.plotly_chart(fig)
+            with tabs[1]:
+                stats = exp_unit_dao.get_all_planting_and_harvesting_sample_counts(st.session_state.selected_exp_unit)
+                stats = {k: v for k, v in stats.items() if v > 0}
+                if not stats:
+                    st.info("No planting and harvesting sample found for the selected experimental unit.")
+                else:
+                    events["Planting and Harvesting Events"] = []
+                    for event_type in stats:
+                        events["Planting and Harvesting Events"].append(event_type)
+                    fig = create_pie_chart(stats)
+                    st.plotly_chart(fig)
+            with tabs[2]:
+                stats = exp_unit_dao.get_all_mamagement_events(st.session_state.selected_exp_unit)
+                stats = {k: v for k, v in stats.items() if v > 0}
+                if not stats:
+                    st.info("No management events found for the selected experimental unit.")
+                else:
+                    events["Management Events"] = []
+                    for event_type in stats:
+                        events["Management Events"].append(event_type)
+                    fig = create_pie_chart(stats)
+                    st.plotly_chart(fig)
+    
+        # Filter to further narrow down the experimental units event to display
+        # Filter by event type
+        cols = st.columns(2)
+        with cols[0]:
+            st.subheader("Filter by Event Type")
+            available_event_types = [key for key in events.keys()]
+            event_type = st.selectbox("Select an Event Type", available_event_types)
+        
+        with cols[1]:
+            st.subheader("Filter by Event Name")
+            available_event_names = events[event_type]
+            event_name = st.selectbox("Select an Event Name", available_event_names)
+    
+        # Check if event name is selected
+        if event_name:
+            st.info(f"Selected Event Type: {event_type}, Event Name: {event_name}")
+            datas = exp_unit_dao.get_all_data_samples(st.session_state.selected_exp_unit, event_name)
+            st.dataframe(datas, use_container_width=True)
 else:
     st.info("Please select a filter to view the experimental units.")
