@@ -68,36 +68,41 @@ with col1:
     # Get experimental unit data
     exp_units = field_dao.get_all_experimental_unit(st.session_state.selected_field)
     st.subheader("Experimental Units On Field")
-    # Print out the total number of experimental units
-    st.info(f"Total Experimental Units Found on Field: {exp_units.shape[0]}")
 
-    # Rename columns for better readability
-    exp_units.rename(columns={"id": "Experimental Unit ID", "Start_Date": "Start Date", "End_Date": "End Date", "Size": "Size"}, inplace=True)
-
-    # Replace None start date and end date with "Not Available"
-    exp_units['Start Date'] = exp_units['Start Date'].apply(lambda x: "Not Available" if pd.isnull(x) else x)
-    exp_units['End Date'] = exp_units['End Date'].apply(lambda x: "Not Available" if pd.isnull(x) else x)
-
-    # If size are all empty, drop the column
-    if exp_units['Size'].isnull().all():
-        exp_units.drop(columns=['Size'], inplace=True)
+    # Check if there are no experimental units
+    if exp_units is None or exp_units.empty:
+        st.info("No experimental units found on this field.")
+        st.stop()
     else:
-        # Replace size with "Unknown" if it is empty
-        exp_units['Size'] = exp_units['Size'].apply(lambda x: "Unknown" if pd.isnull(x) else x)
-    
-    event = st.dataframe(
-        exp_units,
-        use_container_width=True,
-        hide_index=True,
-        # height=490,
-        on_select='rerun',
-        selection_mode='single-row',
-        )
-    selected_row = event.selection.rows
-    if selected_row:
-        st.session_state.selected_exp_unit = exp_units.loc[selected_row[0], "Experimental Unit ID"]
-        st.switch_page("pages/_ExperimentalUnits.py")
+        # Print out the total number of experimental units
+        st.info(f"Total Experimental Units Found on Field: {exp_units.shape[0]}")
 
+        # Rename columns for better readability
+        exp_units.rename(columns={"id": "Experimental Unit ID", "Start_Date": "Start Date", "End_Date": "End Date", "Size": "Size"}, inplace=True)
+
+        # Replace None start date and end date with "Not Available"
+        exp_units['Start Date'] = exp_units['Start Date'].apply(lambda x: "Not Available" if pd.isnull(x) else x)
+        exp_units['End Date'] = exp_units['End Date'].apply(lambda x: "Not Available" if pd.isnull(x) else x)
+
+        # If size are all empty, drop the column
+        if exp_units['Size'].isnull().all():
+            exp_units.drop(columns=['Size'], inplace=True)
+        else:
+            # Replace size with "Unknown" if it is empty
+            exp_units['Size'] = exp_units['Size'].apply(lambda x: "Unknown" if pd.isnull(x) else x)
+        
+        event = st.dataframe(
+            exp_units,
+            use_container_width=True,
+            hide_index=True,
+            # height=490,
+            on_select='rerun',
+            selection_mode='single-row',
+            )
+        selected_row = event.selection.rows
+        if selected_row:
+            st.session_state.selected_exp_unit = exp_units.loc[selected_row[0], "Experimental Unit ID"]
+            st.switch_page("pages/_ExperimentalUnits.py")
 with col2:
     # Get latitude and longitude of the selected field
     df = field_dao.get_lat_long_dataframe(st.session_state.selected_field)
@@ -139,4 +144,6 @@ else:
 # get all publicaions in a field
 publications_df = field_dao.get_publications(st.session_state.selected_field)
 st.subheader("Publications on Field")
+# drop rows with missing values
+publications_df = publications_df.dropna()
 st.dataframe(publications_df, use_container_width=True)
