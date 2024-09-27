@@ -91,8 +91,13 @@ with col2:
 # Get weather observations of a weather station
 weather_observation_df = weather_station_dao.get_weather_observation(st.session_state.selected_weather_station)
 
+# Check if weather observation data have at least one row
+if weather_observation_df.empty:
+    st.error("No weather observation data found for this weather station.")
+    st.stop()
+
 # Convert 'Date' column to datetime
-weather_observation_df['Date'] = pd.to_datetime(weather_observation_df['Date'], format='%Y-%m-%d')
+weather_observation_df['Date'] = pd.to_datetime(weather_observation_df['date'], format='%Y-%m-%d')
 
 # Add separate date inputs for start and end dates
 min_date = weather_observation_df['Date'].min()
@@ -123,6 +128,8 @@ else:
 mask = (weather_observation_df['Date'] >= pd.to_datetime(st.session_state.date_range[0])) & (weather_observation_df['Date'] <= pd.to_datetime(st.session_state.date_range[1]))
 filtered_df = weather_observation_df[mask]
 
+st.dataframe(filtered_df, use_container_width=True)
+
 # Function to create Streamlit charts
 def create_streamlit_chart(df, x, y, title):
     st.subheader(title)
@@ -137,77 +144,94 @@ chart1, chart2 = st.columns(2)
 with chart1:
     # Open Pan Evaporation
     st.subheader("Open Pan Evaporation")
-    tab1, tab2 = st.tabs(["Chart", "Data"])
-    with tab1:
-        st.line_chart(filtered_df.set_index('Date')['Open_Pan_Evaporation'])
-    with tab2:
-        # get average of Open Pan Evaporation
-        avg_open_pan_evaporation = filtered_df['Open_Pan_Evaporation'].mean()
-        st.metric("Average Open Pan Evaporation", f"{avg_open_pan_evaporation:.2f}")
-        st.dataframe(filtered_df[['Date', 'Open_Pan_Evaporation']].style.highlight_max(axis=0), use_container_width=True, hide_index=True)
+
+    # Check if 'openPanEvaporation_mm_per_d' column is available
+    if 'openPanEvaporation_mm_per_d' not in filtered_df.columns:
+        st.info("Open Pan Evaporation data is not available for this weather station.")
+    else:
+        tab1, tab2 = st.tabs(["Chart", "Data"])
+        with tab1:
+            st.line_chart(filtered_df.set_index('Date')['openPanEvaporation_mm_per_d'])
+        with tab2:
+            # get average of Open Pan Evaporation
+            avg_open_pan_evaporation = filtered_df['openPanEvaporation_mm_per_d'].mean()
+            st.metric("Average Open Pan Evaporation", f"{avg_open_pan_evaporation:.2f}")
+            st.dataframe(filtered_df[['Date', 'openPanEvaporation_mm_per_d']].style.highlight_max(axis=0), use_container_width=True, hide_index=True)
 
     # Soil Temperature
     st.subheader("Soil Temperature")
     tab1, tab2 = st.tabs(["Chart", "Data"])
-    with tab1:
-        st.line_chart(filtered_df.set_index('Date')[['Soil_Temperature_5cm', 'Soil_Temperature_10cm']])
-    with tab2:
-        # get average of Soil Temperature
-        avg_soil_temperature_5cm = filtered_df['Soil_Temperature_5cm'].mean()
-        avg_soil_temperature_10cm = filtered_df['Soil_Temperature_10cm'].mean()
-        cols = st.columns(2)
-        with cols[0]:
-            st.metric("Average Soil Temperature 5cm", f"{avg_soil_temperature_5cm:.2f}")
-        with cols[1]:
-            st.metric("Average Soil Temperature 10cm", f"{avg_soil_temperature_10cm:.2f}")
-        st.dataframe(filtered_df[['Date', 'Soil_Temperature_5cm', 'Soil_Temperature_10cm']].style.highlight_max(axis=0), use_container_width=True, hide_index=True)
 
-with chart2:
-    # Precipitation and Relative Humidity
-    st.subheader("Precipitation and Relative Humidity")
-    tab1, tab2 = st.tabs(["Chart", "Data"])
-    with tab1:
-        st.line_chart(filtered_df.set_index('Date')[['Precipitation', 'Relative_Humidity_Percent']])
-    with tab2:
+    # Check if 'soilTemp5cm_degC' and 'soilTemp10cm_degC' columns are available
+    if 'soilTemp5cm_degC' not in filtered_df.columns or 'soilTemp10cm_degC' not in filtered_df.columns:
+        st.info("Soil Temperature data is not available for this weather station.")
+    else:
+        # replace '' with zero
+        filtered_df['soilTemp5cm_degC'] = filtered_df['soilTemp5cm_degC'].replace('', 0)
+        filtered_df['soilTemp10cm_degC'] = filtered_df['soilTemp10cm_degC'].replace('', 0)
 
-        # get average of Precipitation and Relative Humidity
-        avg_precipitation = filtered_df['Precipitation'].mean()
-        avg_relative_humidity = filtered_df['Relative_Humidity_Percent'].mean()
-        cols = st.columns(2)
-        with cols[0]:
-            st.metric("Average Precipitation", f"{avg_precipitation:.2f}")
-        with cols[1]:
-            st.metric("Average Relative Humidity", f"{avg_relative_humidity:.2f}")
-        st.dataframe(filtered_df[['Date', 'Precipitation', 'Relative_Humidity_Percent']].style.highlight_max(axis=0), use_container_width=True, hide_index=True)
+        # Conver soil temperature columns to float
+        filtered_df['soilTemp5cm_degC'] = filtered_df['soilTemp5cm_degC'].astype(float)
+        filtered_df['soilTemp10cm_degC'] = filtered_df['soilTemp10cm_degC'].astype(float)
+        with tab1:
+            st.line_chart(filtered_df.set_index('Date')[['soilTemp5cm_degC', 'soilTemp10cm_degC']])
+        with tab2:
+            # get average of Soil Temperature
+            avg_soil_temperature_5cm = filtered_df['soilTemp5cm_degC'].mean()
+            avg_soil_temperature_10cm = filtered_df['soilTemp10cm_degC'].mean()
+            cols = st.columns(2)
+            with cols[0]:
+                st.metric("Average Soil Temperature 5cm", f"{avg_soil_temperature_5cm:.2f}")
+            with cols[1]:
+                st.metric("Average Soil Temperature 10cm", f"{avg_soil_temperature_10cm:.2f}")
+            st.dataframe(filtered_df[['Date', 'soilTemp5cm_degC', 'soilTemp10cm_degC']].style.highlight_max(axis=0), use_container_width=True, hide_index=True)
 
-    # Solar Radiation and Temperature
-    st.subheader("Solar Radiation and Temperature")
-    tab1, tab2 = st.tabs(["Chart", "Data"])
-    with tab1:
-        st.line_chart(filtered_df.set_index('Date')[['Solar_Radiation_Bare_Soil', 'Min_Temperature', 'Max_Temperature']])
-    with tab2:
-        # get average of Solar Radiation and Temperature
-        avg_solar_radiation = filtered_df['Solar_Radiation_Bare_Soil'].mean()
-        avg_min_temperature = filtered_df['Min_Temperature'].mean()
-        avg_max_temperature = filtered_df['Max_Temperature'].mean()
-        cols = st.columns(3)
-        with cols[0]:
-            st.metric("Average Solar Radiation", f"{avg_solar_radiation:.2f}")
-        with cols[1]:
-            st.metric("Average Min Temperature", f"{avg_min_temperature:.2f}")
-        with cols[2]:
-            st.metric("Average Max Temperature", f"{avg_max_temperature:.2f}")
-        st.dataframe(filtered_df[['Date', 'Solar_Radiation_Bare_Soil', 'Min_Temperature', 'Max_Temperature']].style.highlight_max(axis=0), use_container_width=True, hide_index=True)
+# with chart2:
+#     # Precipitation and Relative Humidity
+#     st.subheader("Precipitation and Relative Humidity")
+#     tab1, tab2 = st.tabs(["Chart", "Data"])
+#     with tab1:
+#         st.line_chart(filtered_df.set_index('Date')[['Precipitation', 'Relative_Humidity_Percent']])
+#     with tab2:
 
-# Wind Speed
-st.subheader("Wind Speed")
-tab1, tab2 = st.tabs(["Chart", "Data"])
-with tab1:
-    st.line_chart(filtered_df.set_index('Date')['Wind_Speed'])
-with tab2:
-    # get average of Wind Speed
-    avg_wind_speed = filtered_df['Wind_Speed'].mean()
-    st.metric("Average Wind Speed", f"{avg_wind_speed:.2f}")
-    st.dataframe(filtered_df[['Date', 'Wind_Speed']].style.highlight_max(axis=0), use_container_width=True, hide_index=True)
+#         # get average of Precipitation and Relative Humidity
+#         avg_precipitation = filtered_df['Precipitation'].mean()
+#         avg_relative_humidity = filtered_df['Relative_Humidity_Percent'].mean()
+#         cols = st.columns(2)
+#         with cols[0]:
+#             st.metric("Average Precipitation", f"{avg_precipitation:.2f}")
+#         with cols[1]:
+#             st.metric("Average Relative Humidity", f"{avg_relative_humidity:.2f}")
+#         st.dataframe(filtered_df[['Date', 'Precipitation', 'Relative_Humidity_Percent']].style.highlight_max(axis=0), use_container_width=True, hide_index=True)
+
+#     # Solar Radiation and Temperature
+#     st.subheader("Solar Radiation and Temperature")
+#     tab1, tab2 = st.tabs(["Chart", "Data"])
+#     with tab1:
+#         st.line_chart(filtered_df.set_index('Date')[['Solar_Radiation_Bare_Soil', 'Min_Temperature', 'Max_Temperature']])
+#     with tab2:
+#         # get average of Solar Radiation and Temperature
+#         avg_solar_radiation = filtered_df['Solar_Radiation_Bare_Soil'].mean()
+#         avg_min_temperature = filtered_df['Min_Temperature'].mean()
+#         avg_max_temperature = filtered_df['Max_Temperature'].mean()
+#         cols = st.columns(3)
+#         with cols[0]:
+#             st.metric("Average Solar Radiation", f"{avg_solar_radiation:.2f}")
+#         with cols[1]:
+#             st.metric("Average Min Temperature", f"{avg_min_temperature:.2f}")
+#         with cols[2]:
+#             st.metric("Average Max Temperature", f"{avg_max_temperature:.2f}")
+#         st.dataframe(filtered_df[['Date', 'Solar_Radiation_Bare_Soil', 'Min_Temperature', 'Max_Temperature']].style.highlight_max(axis=0), use_container_width=True, hide_index=True)
+
+# # Wind Speed
+# st.subheader("Wind Speed")
+# tab1, tab2 = st.tabs(["Chart", "Data"])
+# with tab1:
+#     st.line_chart(filtered_df.set_index('Date')['Wind_Speed'])
+# with tab2:
+#     # get average of Wind Speed
+#     avg_wind_speed = filtered_df['Wind_Speed'].mean()
+#     st.metric("Average Wind Speed", f"{avg_wind_speed:.2f}")
+#     st.dataframe(filtered_df[['Date', 'Wind_Speed']].style.highlight_max(axis=0), use_container_width=True, hide_index=True)
 
 # Remove the final detailed view section
