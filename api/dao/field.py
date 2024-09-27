@@ -82,7 +82,7 @@ class FieldDAO:
         def get_exp_units(tx):
             cypher = """MATCH (f:Field {fieldId: $field_id})<-[:locatedInField]-(u:ExperimentalUnit)
                         RETURN
-                            u.expUnit_UID as id,
+                            u.expUnitId as id,
                             u.expUnitStartDate as Start_Date,
                             u.expUnitEndDate as End_Date,
                             u.expUnitSize as Size
