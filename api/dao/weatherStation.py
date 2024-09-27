@@ -37,26 +37,23 @@ class weatherStationDAO:
     def get_weather_observation(self, weatherStation_id):
         
         def get_weather_observation(tx):
-            cypher = """MATCH (w:WeatherStation {weatherStationId: $weatherStation_id})-[:recordsWeatherForField]-(f:Field)-[:weatherAtField]-(o:WeatherObservation)
-                        RETURN
-                            o.openPanEvaporation as Open_Pan_Evaporation,
-                            o.precipitation as Precipitation,
-                            o.relativeHumidityPercent as Relative_Humidity_Percent,
-                            o.soilTemp10cm as Soil_Temperature_10cm,
-                            o.soilTemp5cm as Soil_Temperature_5cm,
-                            o.solarRadiationBareSoil as Solar_Radiation_Bare_Soil,
-                            o.tempMax as Max_Temperature,
-                            o.tempMin as Min_Temperature,
-                            o.weatherObservationDate as Date,
-                            o.windSpeed as Wind_Speed
-                        ORDER BY o.weatherObservationDate ASC"""
+            cypher = """MATCH (w:WeatherStation {weatherStationId: $weatherStation_id})-[:weatherRecordedBy]->(o:WeatherObservation)
+                        RETURN apoc.map.fromPairs([key IN keys(o) | [key, o[key]]]) AS properties"""
             result = tx.run(cypher, weatherStation_id=weatherStation_id)
-            return result.to_df()
+            data = [record["properties"] for record in result]
+            dataframe = pd.DataFrame(data)
+            # drop columns with all null values
+            dataframe = dataframe.dropna(axis=1, how='all')
+            # # drop columns with all zero values
+            dataframe = dataframe.loc[:, (dataframe != 0).any(axis=0)]
+            # drop rows with all null values
+            dataframe = dataframe.dropna(axis=0, how='all')
+            # fill null values with 'Not Available'
+            dataframe = dataframe.fillna('Not Available')
+            return dataframe
 
         with self.driver.session() as session:
-            result = session.execute_read(get_weather_observation)
-
-            return result
+            return session.execute_read(get_weather_observation)
     
     # get which field this weather station is associated with
     def get_field(self, weatherStation_id):
