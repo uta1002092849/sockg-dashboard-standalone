@@ -156,3 +156,59 @@ class ExperimentalUnitDAO:
         
         with self.driver.session() as session:
             return session.execute_read(get_filters)
+    
+    # Get total number of samples nodes connected to an experimental unit
+    def get_sample_count(self, expUnit_id, sample_type):
+        def get_sample_count(tx):
+            cypher = """MATCH (u:ExperimentalUnit {expUnitId: $expUnit_id})-[]-(s)
+                        WHERE ANY(label IN labels(s) WHERE label = $sample_type)
+                        RETURN count(s) as count"""
+            result = tx.run(cypher, expUnit_id=expUnit_id, sample_type=sample_type)
+            return int(result.single()["count"])
+        
+        with self.driver.session() as session:
+            return session.execute_read(get_sample_count)
+    
+    # Get the count of all samples connected to an experimental unit
+    def get_all_measurement_sample_counts(self, expUnit_id):
+        samples = ["GasSample", "SoilBiologicalSample", "BioMassEnergy", "SoilChemicalSample", "SoilPhysicalSample", "GasNutrientLoss", "BioMassCarbohydrate", "BioMassMineral", "WaterQualityArea", "WindErosionArea", "YieldNutrientUptake", "WaterQualityConc"]
+        sample_counts = {}
+        for sample in samples:
+            sample_counts[sample] = self.get_sample_count(expUnit_id, sample)
+        return sample_counts
+        
+    # Get the count of all planting and harvest samples connected to an experimental unit
+    def get_all_planting_and_harvesting_sample_counts(self, expUnit_id):
+        samples = ["Grazing","HarvestFraction", "PlantingEvent", "CropGrowthStage", "Harvest"]
+        sample_counts = {}
+        for sample in samples:
+            sample_counts[sample] = self.get_sample_count(expUnit_id, sample)
+        return sample_counts
+
+    # Get all management events applied to an experimental unit
+    def get_all_mamagement_events(self, expUnit_id):
+        samples = ["Amendment", "Tillage", "ResidueManagementEvent","GrazingManagementEvent", "Treatment"]
+        sample_counts = {}
+        for sample in samples:
+            sample_counts[sample] = self.get_sample_count(expUnit_id, sample)
+        return sample_counts
+    
+    # Get data sample information for an experimental unit
+    def get_all_data_samples(self, expUnit_id, sample_type):
+        def get_data_samples(tx):
+            cypher = """MATCH (u:ExperimentalUnit {expUnitId: $expUnit_id})-[]-(s)
+                        WHERE ANY(label IN labels(s) WHERE label = $sample_type)
+                        RETURN apoc.map.fromPairs([key IN keys(s) | [key, s[key]]]) AS properties"""
+            result = tx.run(cypher, expUnit_id=expUnit_id, sample_type=sample_type)
+            data = [record['properties'] for record in result]
+            dataframe = pd.DataFrame(data)
+            # drop columns with all missing values
+            dataframe = dataframe.dropna(axis=1, how='all')
+            # drop rows with all missing values
+            dataframe = dataframe.dropna(axis=0, how='all')
+            # replace None with "Not Available"
+            dataframe = dataframe.fillna("Not Available")
+            return dataframe
+        
+        with self.driver.session() as session:
+            return session.execute_read(get_data_samples)
