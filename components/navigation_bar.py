@@ -17,5 +17,7 @@ def navition_bar():
         # with st.expander("Natural Language Decode", expanded=True):
         #     st.page_link("pages/_Text2Cypher.py", label="Text2Cypher", icon="⌨️")
         
+        with st.expander("Ontology Exploration", expanded=True):
+            st.page_link("pages/_Ontology.py", label="Ontology Explorer", icon="📡")
         with st.expander("Feedback", expanded=True):
             st.page_link("pages/_Feedback.py", label="Feedback", icon="📝")
