@@ -5,7 +5,7 @@ from datetime import datetime
 from components.navigation_bar import navition_bar
 
 # Page config and icon
-st.set_page_config(layout="wide", page_title="SOCKG Dashboard - Feedback", page_icon=":triangular_ruler:")
+st.set_page_config(layout="wide", page_title="Feedback View", page_icon=":triangular_ruler:")
 
 # Sidebar for navigation
 navition_bar()

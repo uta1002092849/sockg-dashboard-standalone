@@ -7,7 +7,7 @@ from components.get_pydeck_chart import get_pydeck_chart
 
 driver = init_driver()
 # Page config and icon
-st.set_page_config(layout="wide", page_title="SOCKG Dashboard - Weather Station", page_icon=":thermometer:")
+st.set_page_config(layout="wide", page_title="Weather Station View", page_icon=":thermometer:")
 
 # sidebar for navigation
 navition_bar()

@@ -8,7 +8,7 @@ import pandas as pd
 pd.options.mode.chained_assignment = None
 
 # Page config and icon
-st.set_page_config(layout="wide", page_title="SOCKG Dashboard - Experimental Unit", page_icon=":triangular_ruler:")
+st.set_page_config(layout="wide", page_title="Experimental Unit View", page_icon=":triangular_ruler:")
 
 # navbar for navigation
 navition_bar()

@@ -5,7 +5,7 @@ import pandas as pd
 from components.navigation_bar import navition_bar
 
 # Page config and icon
-st.set_page_config(layout="wide", page_title="SOCKG Dashboard - Treatments", page_icon=":pill:")
+st.set_page_config(layout="wide", page_title="Treatments View", page_icon=":pill:")
 
 # sidebar for navigation
 navition_bar()

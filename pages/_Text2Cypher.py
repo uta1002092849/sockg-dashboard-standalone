@@ -8,7 +8,7 @@ driver = init_driver()
 state = st.session_state
 
 # Page config and icon
-st.set_page_config(layout="wide", page_title="SOCKG Dashboard - Text2Cypher", page_icon=":keyboard:")
+st.set_page_config(layout="wide", page_title="Text2Cypher View", page_icon=":keyboard:")
 
 # sidebar for navigation
 navition_bar()

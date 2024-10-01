@@ -6,7 +6,7 @@ from components.get_pydeck_chart import get_pydeck_chart
 import pandas as pd
 
 # Page config and icon
-st.set_page_config(layout="wide", page_title="SOCKG Dashboard - Fields", page_icon=":national_park:")
+st.set_page_config(layout="wide", page_title="Fields View", page_icon=":national_park:")
 
 # sidebar for navigation
 navition_bar()
