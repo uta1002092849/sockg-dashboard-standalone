@@ -38,3 +38,11 @@ class GeneralDAO:
         with self.driver.session() as session:
             records = session.run(query)
             return records.single()["count"]
+        
+    # Fetch data attributes of any input node type
+    def get_node_attributes(self, node_type):
+        query = f"MATCH (n:{node_type}) WITH n LIMIT 1 UNWIND keys(n) as key RETURN key"
+        with self.driver.session() as session:
+            records = session.run(query, node_type=node_type)
+            attributes = [record["key"] for record in records]
+        return attributes
