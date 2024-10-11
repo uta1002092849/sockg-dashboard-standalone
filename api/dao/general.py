@@ -17,17 +17,19 @@ class GeneralDAO:
         query = "call db.schema.visualization()"
         result = self.driver.execute_query(query, result_transformer_=neo4j.Result.graph)
         nodes = []
+        look_up = {}
         for node in result.nodes:
             val  = {}
-            val["id"] = node.element_id
-            val["label"] = list(node.labels)[0]
-            val["name"] = val["label"]
+            label = list(node.labels)[0]
+            look_up[node.element_id] = label
+            val["id"] = label
+            val["label"] = label
             val["instance count"] = self.get_sample_count(val["label"])
             nodes.append({"data": val})
 
         edges = []
         for edge in result.relationships:
-            edges.append({"data": {"id": edge.element_id, "label": edge.type, "source": edge.start_node.element_id, "target": edge.end_node.element_id}})
+            edges.append({"data": {"id": edge.type, "label": edge.type, "source": look_up[edge.start_node.element_id], "target": look_up[edge.end_node.element_id]}})
 
         elements = {"nodes": nodes, "edges": edges}
         return elements
@@ -43,6 +45,10 @@ class GeneralDAO:
     def get_node_attributes(self, node_type):
         query = f"MATCH (n:{node_type}) WITH n LIMIT 1 UNWIND keys(n) as key RETURN key"
         with self.driver.session() as session:
-            records = session.run(query, node_type=node_type)
-            attributes = [record["key"] for record in records]
-        return attributes
+            try:
+                records = session.run(query, node_type=node_type)
+                attributes = [record["key"] for record in records]
+                return attributes
+            except Exception as e:
+                return []
+    
