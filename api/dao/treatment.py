@@ -1,4 +1,26 @@
 import pandas as pd
+import re
+
+def extract_numeric_value(descriptor):
+    descriptor = str(descriptor)
+
+    # Remove leading/trailing whitespace
+    descriptor = descriptor.strip()
+    
+    # Check for non-numeric descriptors indicating zero, might need more
+    if descriptor.lower() in ['none', 'none applied', 'check', 'no nitrogen', 'zero nitrogen fertilizer (zn)']:
+        return 0
+    
+    # Extract all numeric values
+    numbers = re.findall(r'\d+(?:\.\d+)?', descriptor)
+
+    if numbers:
+        # If there are multiple numbers, return the first one
+        return float(numbers[0])
+    
+    # If we can't determine a numeric value, return 'unavailable'
+    return None
+
 class TreatmentDAO:
     def __init__(self, driver):
         self.driver = driver
@@ -42,6 +64,7 @@ class TreatmentDAO:
             dataframe =  session.execute_read(get_treatments)
             # convert end date to 'Present' if it is null
             dataframe['End_Date'] = dataframe['End_Date'].apply(lambda x: 'Present' if pd.isnull(x) else x)
+
             return dataframe
     
 
@@ -69,3 +92,25 @@ class TreatmentDAO:
             # convert end date to 'Present' if it is null
             dataframe['End_Date'] = dataframe['End_Date'].apply(lambda x: 'Present' if pd.isnull(x) else x)
             return dataframe
+        
+    # Get all treatments along with their attributes
+    def get_all_treatments(self):
+        def get_treatments(tx):
+            cypher = """
+            MATCH (t:Treatment)
+                RETURN apoc.map.fromPairs([key IN keys(t) | [key, t[key]]]) AS properties
+            """
+            result = tx.run(cypher)
+            data = [record['properties'] for record in result]
+            dataframe = pd.DataFrame(data)
+            
+            # Convert all nan and None values to 'unknown'
+            dataframe.fillna('unknown', inplace=True)
+
+            # Add numeric values for nitrogen treatment
+            dataframe['numericNitrogen'] = dataframe['nitrogenTreatmentDescriptor'].apply(extract_numeric_value)
+
+            return dataframe
+        
+        with self.driver.session() as session:
+            return session.execute_read(get_treatments)
