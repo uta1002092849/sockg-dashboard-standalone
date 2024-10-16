@@ -69,39 +69,42 @@ class TreatmentDAO:
     
 
     # get all experimental units that belong to a treatment
-    def get_all_expUnit(self, treatmentId):
-        def get_expUnits(tx):
-            cypher = """
-            MATCH (treatment:Treatment {treatmentId: $treatmentId})-[:appliedInExpUnit]->(expUnit:ExperimentalUnit)
-            RETURN 
-                expUnit.expUnit_UID AS ID,
-                expUnit.expUnitChangeInManagement AS description,
-                expUnit.expUnitStartDate AS Start_Date,
-                expUnit.expUnitEndDate AS End_Date
-            ORDER BY expUnit.expUnitDescriptor ASC
-            """
-            parameters = {
-                "treatmentId": treatmentId
-            }
+    # def get_all_expUnit(self, treatmentId):
+    #     def get_expUnits(tx):
+    #         cypher = """
+    #         MATCH (treatment:Treatment {treatmentId: $treatmentId})-[:appliedInExpUnit]->(expUnit:ExperimentalUnit)
+    #         RETURN 
+    #             expUnit.expUnit_UID AS ID,
+    #             expUnit.expUnitChangeInManagement AS description,
+    #             expUnit.expUnitStartDate AS Start_Date,
+    #             expUnit.expUnitEndDate AS End_Date
+    #         ORDER BY expUnit.expUnitDescriptor ASC
+    #         """
+    #         parameters = {
+    #             "treatmentId": treatmentId
+    #         }
 
-            result = tx.run(cypher, parameters)
-            return result.to_df()
+    #         result = tx.run(cypher, parameters)
+    #         return result.to_df()
         
-        with self.driver.session() as session:
-            dataframe =  session.execute_read(get_expUnits)
-            # convert end date to 'Present' if it is null
-            dataframe['End_Date'] = dataframe['End_Date'].apply(lambda x: 'Present' if pd.isnull(x) else x)
-            return dataframe
+    #     with self.driver.session() as session:
+    #         dataframe =  session.execute_read(get_expUnits)
+    #         # convert end date to 'Present' if it is null
+    #         dataframe['End_Date'] = dataframe['End_Date'].apply(lambda x: 'Present' if pd.isnull(x) else x)
+    #         return dataframe
         
     # Get all treatments along with their attributes
     def get_all_treatments(self):
         def get_treatments(tx):
             cypher = """
-            MATCH (t:Treatment)
-                RETURN apoc.map.fromPairs([key IN keys(t) | [key, t[key]]]) AS properties
+            MATCH (t:Treatment)-[:hasRotation]-(r:Rotation)
+                RETURN apoc.map.fromPairs([key IN keys(t) | [key, t[key]]]) AS properties, r.rotationDescriptor as rotation_crop
             """
             result = tx.run(cypher)
-            data = [record['properties'] for record in result]
+            data = []
+            for record in result:
+                record['properties']['coverCrop'] = record['rotation_crop']
+                data.append(record['properties'])
             dataframe = pd.DataFrame(data)
             
             # Convert all nan and None values to 'unknown'
@@ -110,7 +113,27 @@ class TreatmentDAO:
             # Add numeric values for nitrogen treatment
             dataframe['numericNitrogen'] = dataframe['nitrogenTreatmentDescriptor'].apply(extract_numeric_value)
 
+            # remove columns that are all 'unknown'
+            dataframe = dataframe.loc[:, (dataframe != 'unknown').any(axis=0)]
+
             return dataframe
         
         with self.driver.session() as session:
             return session.execute_read(get_treatments)
+    
+    # Get all yeildNUtrientUptake for a treatment
+    def get_all_expUnit(self, treatmentId):
+        def get_nutrient_yield(tx):
+            cypher = """
+            MATCH (t:Treatment {treatmentId: $treatmentId})-[:yieldNutrUptakeTreatment]-(u:YieldNutrientUptake)
+            RETURN u.expUnitId as id
+            """
+            parameters = {
+                "treatmentId": treatmentId
+            }
+
+            result = tx.run(cypher, parameters)
+            expUnits = [record['id'] for record in result]    
+            return expUnits    
+        with self.driver.session() as session:
+            return session.execute_read(get_nutrient_yield)
