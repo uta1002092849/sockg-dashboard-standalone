@@ -65,7 +65,7 @@ class GeneralDAO:
     
     # Fetch example value for node attribute
     def get_example_value(self, node_type, attribute):
-        query = f"MATCH (n:{node_type}) WHERE n.{attribute} is not null AND TOSTRING(n.{attribute}) <> 'NaN' RETURN n.{attribute} AS example LIMIT 3"
+        query = f"MATCH (n:{node_type}) WHERE n.{attribute} is not null AND TOSTRING(n.{attribute}) <> 'NaN' RETURN DISTINCT(n.{attribute}) AS example LIMIT 3"
         with self.driver.session() as session:
             records = session.run(query)
             # Check if there is any record
