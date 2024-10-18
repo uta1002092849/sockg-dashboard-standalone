@@ -45,8 +45,8 @@ if "selected_treatment" not in st.session_state:
     st.session_state.selected_treatment = None
 
 # Function to update filter options
-def update_filter_options(df, filters):
-    for column, value in filters.items():
+def update_filter_options(df, treatment_filter):
+    for column, value in treatment_filter.items():
         if column == "organicManagement" or column == "irrigation":
             if value == True:
                 df = df[df[column] == "Yes"]
@@ -60,9 +60,9 @@ def update_filter_options(df, filters):
             st.session_state.selected_treatment = None
     return df
 
-# Initialize session state for filters
-if 'filters' not in st.session_state:
-    st.session_state.filters = {
+# Initialize session state for treatment_filter
+if 'treatment_filter' not in st.session_state:
+    st.session_state.treatment_filter = {
         'coverCrop': None,
         'residueRemoval': None,
         'fertilizerAmendmentClass': None,
@@ -78,7 +78,7 @@ if 'filters' not in st.session_state:
 def update_filter(filter_name):
     def callback():
         value = st.session_state[filter_name]
-        st.session_state.filters[filter_name] = value if value != 'Clear' else None
+        st.session_state.treatment_filter[filter_name] = value if value != 'Clear' else None
     return callback
 
 # Create filter widgets
@@ -87,9 +87,9 @@ columns = st.columns(3)
 with columns[0]:
     cols = st.tabs(["Filter", "Distribution of Cover Crop"])
     with cols[0]:
-        filtered_df = update_filter_options(st.session_state.all_treatments, st.session_state.filters)
+        filtered_df = update_filter_options(st.session_state.all_treatments, st.session_state.treatment_filter)
         cover_crops = ['Clear'] + sorted(filtered_df['coverCrop'].unique().tolist())
-        index = cover_crops.index(st.session_state.filters['coverCrop']) if st.session_state.filters['coverCrop'] in cover_crops else 0
+        index = cover_crops.index(st.session_state.treatment_filter['coverCrop']) if st.session_state.treatment_filter['coverCrop'] in cover_crops else 0
         st.selectbox("Select Cover Crop:", cover_crops, index=index, key='coverCrop', on_change=update_filter('coverCrop'))
     with cols[1]:
         fig = px.pie(st.session_state['all_treatments'], names='coverCrop', title='Cover Crop Distribution')
@@ -98,9 +98,9 @@ with columns[0]:
 with columns[1]:
     cols = st.tabs(["Filter", "Distribution of Residue Removal"])
     with cols[0]:
-        filtered_df = update_filter_options(st.session_state.all_treatments, st.session_state.filters)
+        filtered_df = update_filter_options(st.session_state.all_treatments, st.session_state.treatment_filter)
         residue_removals = ['Clear'] + sorted(filtered_df['residueRemoval'].unique().tolist())
-        index = residue_removals.index(st.session_state.filters['residueRemoval']) if st.session_state.filters['residueRemoval'] in residue_removals else 0
+        index = residue_removals.index(st.session_state.treatment_filter['residueRemoval']) if st.session_state.treatment_filter['residueRemoval'] in residue_removals else 0
         st.selectbox("Select Residue Removal:", residue_removals, index=index, key='residueRemoval', on_change=update_filter('residueRemoval'))
     with cols[1]:
         fig = px.pie(st.session_state['all_treatments'], names='residueRemoval', title='Residue Removal Distribution')
@@ -109,9 +109,9 @@ with columns[1]:
 with columns[2]:
     cols = st.tabs(["Filter", "Distribution of Fertilizer Class"])
     with cols[0]:
-        filtered_df = update_filter_options(st.session_state.all_treatments, st.session_state.filters)
+        filtered_df = update_filter_options(st.session_state.all_treatments, st.session_state.treatment_filter)
         fertilizer_classes = ['Clear'] + sorted(filtered_df['fertilizerAmendmentClass'].unique().tolist())
-        index = fertilizer_classes.index(st.session_state.filters['fertilizerAmendmentClass']) if st.session_state.filters['fertilizerAmendmentClass'] in fertilizer_classes else 0
+        index = fertilizer_classes.index(st.session_state.treatment_filter['fertilizerAmendmentClass']) if st.session_state.treatment_filter['fertilizerAmendmentClass'] in fertilizer_classes else 0
         st.selectbox("Select Fertilizer Class:", fertilizer_classes, index=index, key='fertilizerAmendmentClass', on_change=update_filter('fertilizerAmendmentClass'))
     with cols[1]:
         fig = px.pie(st.session_state['all_treatments'], names='fertilizerAmendmentClass', title='Fertilizer Class Distribution')
@@ -122,7 +122,7 @@ st.slider(
     "Nitrogen Amount",
     min_value=st.session_state.all_treatments['numericNitrogen'].min(),
     max_value=st.session_state.all_treatments['numericNitrogen'].max(),
-    value=st.session_state.filters['nitrogenRange'],
+    value=st.session_state.treatment_filter['nitrogenRange'],
     key='nitrogenRange',
     on_change=update_filter('nitrogenRange'),
     format="%.2f kgN/ha"
@@ -130,18 +130,18 @@ st.slider(
 
 col4, col5 = st.columns(2)
 with col4:
-    st.session_state.filters["organicManagement"] = st.checkbox(
+    st.session_state.treatment_filter["organicManagement"] = st.checkbox(
         "Treatment Organic Management",
-        value=st.session_state.filters["organicManagement"],
+        value=st.session_state.treatment_filter["organicManagement"],
     )
 with col5:
-    st.session_state.filters["irrigation"] = st.checkbox(
+    st.session_state.treatment_filter["irrigation"] = st.checkbox(
         "Irrigation",
-        value=st.session_state.filters["irrigation"],
+        value=st.session_state.treatment_filter["irrigation"],
     )
 
-# Apply all filters
-filtered_data = update_filter_options(st.session_state.all_treatments, st.session_state.filters)
+# Apply all treatment_filter
+filtered_data = update_filter_options(st.session_state.all_treatments, st.session_state.treatment_filter)
 
 col_config = {}
 for column in filtered_data.columns:
@@ -152,8 +152,8 @@ col_config['numericNitrogen'] = None
 st.subheader("Filtered Treatments:")
 selected_treatment = None
 
-# Check if filters are applied
-if st.session_state.filters['coverCrop'] or st.session_state.filters['residueRemoval'] or st.session_state.filters['fertilizerAmendmentClass'] or st.session_state.filters['organicManagement'] or st.session_state.filters['irrigation'] or st.session_state.filters['nitrogenRange'] != (st.session_state.all_treatments['numericNitrogen'].min(), st.session_state.all_treatments['numericNitrogen'].max()):
+# Check if treatment_filter are applied
+if st.session_state.treatment_filter['coverCrop'] or st.session_state.treatment_filter['residueRemoval'] or st.session_state.treatment_filter['fertilizerAmendmentClass'] or st.session_state.treatment_filter['organicManagement'] or st.session_state.treatment_filter['irrigation'] or st.session_state.treatment_filter['nitrogenRange'] != (st.session_state.all_treatments['numericNitrogen'].min(), st.session_state.all_treatments['numericNitrogen'].max()):
     st.info(f"Number of treatments found: {filtered_data.shape[0]}")
     # Reset index
     filtered_data.reset_index(drop=True, inplace=True)
