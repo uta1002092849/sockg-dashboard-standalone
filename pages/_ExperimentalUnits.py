@@ -5,7 +5,14 @@ from components.navigation_bar import navition_bar
 import plotly.express as px
 import re
 import pandas as pd
+import os
+import pandas as pd
+from pandasai import SmartDataframe
+from pandasai.llm.local_llm import LocalLLM
 pd.options.mode.chained_assignment = None
+
+# Need to be remove before pushing to the repo
+os.environ["PANDASAI_API_KEY"] = "$2a$10$I0xbBxBQe8f1Djbd7Me2R.2AQYCm/wWH8YIKaHwIEtdv.IlUBOx3y"
 
 # Page config and icon
 st.set_page_config(layout="wide", page_title="Experimental Unit View", page_icon=":triangular_ruler:")
@@ -328,10 +335,22 @@ if selected_exp_unit or st.session_state.selected_exp_unit:
     # Check if event name is selected
     if event_name:
         data = exp_unit_dao.get_all_data_samples(st.session_state.selected_exp_unit, event_name)
+
         # Fix column names
         data.columns = [camel_snake_to_normal(col) for col in data.columns]
-        # Horizontal break
-        st.divider()
         # middle alignment subheader
         st.markdown(f"<h3 style='text-align: center;'>Data Samples recorded for {camel_snake_to_normal(event_name)}</h3>", unsafe_allow_html=True)
         st.dataframe(data, use_container_width=True)
+
+        # st.divider()
+
+        # st.write("Ask a question about the data samples recorded for this event.")
+        # question = st.text_input("Question", "")
+        # ollamallm = LocalLLM(api_base='http://localhost:11434/v1', model ='llama3:8b')
+        # smart_df = SmartDataframe(data, config={"llm": ollamallm})
+        # if question:
+        #     response = smart_df.chat(question)
+        #     st.write(response)
+
+
+        
