@@ -6,9 +6,6 @@ import plotly.express as px
 import re
 import pandas as pd
 import os
-import pandas as pd
-from pandasai import SmartDataframe
-from pandasai.llm.local_llm import LocalLLM
 pd.options.mode.chained_assignment = None
 
 # Need to be remove before pushing to the repo
