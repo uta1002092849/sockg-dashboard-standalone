@@ -139,8 +139,8 @@ class ExperimentalUnitDAO:
                         OPTIONAL MATCH (site)-[:locatedInState]->(state:State)
                         RETURN
                         expUnit.expUnitId AS experimentalUnitId,
-                        COALESCE(expUnit.expUnitStartDate, "unk") AS startDate,
-                        COALESCE(expUnit.expUnitEndDate, "unk") AS endDate,
+                        COALESCE(expUnit.startDate, "unk") AS startDate,
+                        COALESCE(expUnit.endDate, "unk") AS endDate,
                         field.fieldId AS fieldId,
                         COALESCE(field.fieldLongitude_decimal_deg, "unk") AS fieldLongitude,
                         COALESCE(field.fieldLatitude_decimal_deg, "unk") AS fieldLatitude,
