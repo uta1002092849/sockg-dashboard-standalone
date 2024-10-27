@@ -1,17 +1,18 @@
 from api.neo4j import init_driver
 import streamlit as st
 from api.dao.experimentalUnit import ExperimentalUnitDAO
-from components.navigation_bar import navition_bar
+from components.navigation_bar import navigation_bar
 import plotly.express as px
 import re
 import pandas as pd
+from streamlit_pandas_profiling import st_profile_report
 pd.options.mode.chained_assignment = None
 
 # Page config and icon
 st.set_page_config(layout="wide", page_title="Experimental Unit View", page_icon=":triangular_ruler:")
 
 # navbar for navigation
-navition_bar()
+navigation_bar()
 
 # Initialize driver
 driver = init_driver()
@@ -35,6 +36,21 @@ state_abbreviation_to_name = {
 }
 # Reverse the mapping
 state_name_to_abbreviation = {v: k for k, v in state_abbreviation_to_name.items()}
+
+# Custom CSS for styling the display box
+st.markdown("""
+    <style>
+    .info-box {
+        padding: 10px;
+        background-color: #f0f4ff;
+        border-radius: 10px;
+        font-size: 19px;
+        color: #3b3b3b;
+        text-align: center;
+        font-weight: normal;
+    }
+    </style>
+    """, unsafe_allow_html=True)
 
 # Cache experimental unit data to avoid repeated queries
 if 'exp_unit_info' not in st.session_state:
@@ -243,50 +259,59 @@ def create_pie_chart(data):
 
 
 # Display the table of experimental units qualified by the filters
-st.subheader("Filtered Experimental Units")
 selected_exp_unit = None
 # check if filters are applied
 if st.session_state.filters['stateNameFull'] or st.session_state.filters['countyName'] or st.session_state.filters['siteId'] or st.session_state.filters['fieldId']:
+    # A string to display the location of the experimental unit based on the filters
     filtered_data['Location'] = filtered_data[['cityName', 'countyName', 'stateNameFull', 'countryName']].agg(', '.join, axis=1)
     filtered_data = filtered_data.reset_index(drop=True)
     filtered_data = filtered_data[['experimentalUnitId', 'startDate', 'endDate', 'fieldId', 'siteId', 'Location']]
-    filtered_data.columns = ['Experimental Unit ID', 'Start Date', 'End Date', 'Field ID', 'Site ID', 'Location']
+    filtered_data.columns = ['Experimental Unit ID', 'Start Date', 'End Date', 'Field ID', 'Site ID', 'Location (City, County, State, Country)']
     filtered_data = filtered_data.fillna('Not Available')
-    st.info(f"Total Experimental Units Found: {filtered_data.shape[0]}")
+    
+    # Drop columns based on filters
+    if st.session_state.filters['siteId']:
+        filtered_data = filtered_data.drop(columns=['Site ID'])
+    if st.session_state.filters['fieldId']:
+        filtered_data = filtered_data.drop(columns=['Field ID'])
+
+    # Displaying the text in the styled box
+    st.markdown(f'<div class="info-box">Experimental Units Found: {filtered_data.shape[0]} </div>', unsafe_allow_html=True)
+    st.write("")
+
     
     # Selectionable dataframe
     event = st.dataframe(filtered_data, 
                 use_container_width=True,
                 on_select='rerun',
-                selection_mode='single-row',)
+                selection_mode='single-row',
+                hide_index=True)
     selected_row = event.selection.rows
     # get experimental unit id of selected row
     selected_exp_unit = filtered_data.loc[selected_row[0], 'Experimental Unit ID'] if selected_row else None
 else:
-    st.info("Please select a filter to view the experimental units.")
+    st.markdown('<div class="info-box"> Please select a filter to view the experimental units. </div>', unsafe_allow_html=True)
+st.divider()
 
 if selected_exp_unit or st.session_state.selected_exp_unit:
     if selected_exp_unit:
         st.session_state.selected_exp_unit = selected_exp_unit
-    # st.session_state.selected_exp_unit = filtered_data.loc[selected_exp_unit[0], 'Experimental Unit ID']
-    st.info(f"Selected Experimental Unit: {st.session_state.selected_exp_unit}")
+    st.markdown(f'<div class="info-box">Selected Experimental Unit: {st.session_state.selected_exp_unit}</div>', unsafe_allow_html=True)
+    st.write("")
     cols = st.columns(2)
-    events = {}
+    events = []
     with cols[0]:
-        st.subheader("Geographical Location")
         display_spatial_info(st.session_state.exp_unit_info)
     with cols[1]:
-        st.subheader("Data Sample Counts")
-        tabs = st.tabs(["Measurement Events", "Planting and Harvesting Events", "Management Events"])
+        tabs = st.tabs(["Measurement", "Planting and Harvesting", "Management"])
         with tabs[0]:
             stats = exp_unit_dao.get_all_measurement_sample_counts(st.session_state.selected_exp_unit)
             stats = {k: v for k, v in stats.items() if v > 0}
             if not stats:
                 st.info("No measurement sample found for the selected experimental unit.")
             else:
-                events["Measurement Events"] = []
                 for event_type in stats:
-                    events["Measurement Events"].append(event_type)
+                    events.append(event_type)
                 fig = create_pie_chart(stats)
                 st.plotly_chart(fig)
         with tabs[1]:
@@ -295,9 +320,8 @@ if selected_exp_unit or st.session_state.selected_exp_unit:
             if not stats:
                 st.info("No planting and harvesting sample found for the selected experimental unit.")
             else:
-                events["Planting and Harvesting Events"] = []
                 for event_type in stats:
-                    events["Planting and Harvesting Events"].append(event_type)
+                    events.append(event_type)
                 fig = create_pie_chart(stats)
                 st.plotly_chart(fig)
         with tabs[2]:
@@ -306,32 +330,48 @@ if selected_exp_unit or st.session_state.selected_exp_unit:
             if not stats:
                 st.info("No management events found for the selected experimental unit.")
             else:
-                events["Management Events"] = []
                 for event_type in stats:
-                    events["Management Events"].append(event_type)
+                    events.append(event_type)
                 fig = create_pie_chart(stats)
                 st.plotly_chart(fig)
 
     # Filter to further narrow down the experimental units event to display
-    # Filter by event type
-    cols = st.columns(2)
-    with cols[0]:
-        st.subheader("Filter by Event Type")
-        available_event_types = [key for key in events.keys()]
-        event_type = st.selectbox("Select an Event Type", available_event_types, index=None)
-    
-    with cols[1]:
-        st.subheader("Filter by Event Name")
-        available_event_names = events[event_type] if event_type else []
-        event_name = st.selectbox("Select an Event Name", available_event_names, format_func=camel_snake_to_normal, index=None)
+    st.markdown('<div class="info-box"> Select any data property to view more details</div>', unsafe_allow_html=True)
+    st.write("")
+    event_name = st.selectbox("Select a data property for detail view", events, format_func=camel_snake_to_normal, index=None, label_visibility='collapsed')
 
     # Check if event name is selected
     if event_name:
         data = exp_unit_dao.get_all_data_samples(st.session_state.selected_exp_unit, event_name)
-        # Fix column names
         data.columns = [camel_snake_to_normal(col) for col in data.columns]
-        # Horizontal break
-        st.divider()
-        # middle alignment subheader
-        st.markdown(f"<h3 style='text-align: center;'>Data Samples recorded for {camel_snake_to_normal(event_name)}</h3>", unsafe_allow_html=True)
         st.dataframe(data, use_container_width=True)
+        
+        # 3 columns to select x-ais, multiple y-axis and plot type
+        st.markdown('<div class="info-box">You can also visualize the data on a 2D graph</div>', unsafe_allow_html=True)
+        st.write("")
+        x_axis, y_axis, plot_type = st.columns(3)
+        with x_axis:
+            x_axis = st.selectbox("Select x-axis", data.columns)
+        with y_axis:
+            y_axis = st.multiselect("Select y-axis", data.columns)
+        with plot_type:
+            plot_type = st.selectbox("Select plot type", ["line", "bar", "area", "scatter"])
+        
+        # Check if y-axis is selected
+        if y_axis:
+            try:
+                if plot_type == "line":
+                    st.line_chart(data, x=x_axis, y=y_axis, use_container_width=True)
+                elif plot_type == "bar":
+                    st.bar_chart(data, x=x_axis, y=y_axis, use_container_width=True)
+                elif plot_type == "area":
+                    st.area_chart(data, x=x_axis, y=y_axis, use_container_width=True)
+                elif plot_type == "scatter":
+                    st.scatter_chart(data, x=x_axis, y=y_axis, use_container_width=True)
+                else:
+                    st.info("Please select a plot type to display the data.")
+            except Exception as e:
+                st.info("Something went wrong. Please select a different x-axis or y-axis to display the data.")
+            
+    
+    
