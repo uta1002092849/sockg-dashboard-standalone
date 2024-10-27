@@ -1,10 +1,11 @@
 import streamlit as st
 from api.neo4j import init_driver
-from components.navigation_bar import navition_bar
+from components.navigation_bar import navigation_bar
 from st_link_analysis import st_link_analysis, NodeStyle, EdgeStyle
 from api.dao.general import GeneralDAO
 import random
 from st_link_analysis.component.layouts import LAYOUTS
+import json
 
 # Constants
 LAYOUT_LIST = list(LAYOUTS.keys())
@@ -60,14 +61,25 @@ def update_elements():
                     "target": raw_attr
                 }
             }
-            
             st.session_state.elements["nodes"].append(new_node)
             st.session_state.elements["edges"].append(new_edge)
             st.session_state.node_styles.append(NodeStyle(raw_attr, st.session_state.color[node_id], caption="caption"))
 
+def load_predifined_graph():
+    """Load a pre-defined layout for the graph."""
+    with open("./graph.json", "r") as f:
+        data = json.load(f)
+        st.session_state.elements = data
+    return True
+
 # Initialize session state variables
 if "elements" not in st.session_state:
+    with open("./location.json", "r") as f:
+        location_dict = json.load(f)
     st.session_state.elements = dao.get_ontology_data()
+    for node in st.session_state.elements["nodes"]:
+        node["position"] = location_dict[node["data"]["id"]]
+    
 if "selected_node" not in st.session_state:
     st.session_state.selected_node = None
 if "color" not in st.session_state:
@@ -79,7 +91,7 @@ if "edge_styles" not in st.session_state:
     st.session_state.edge_styles.insert(0, EdgeStyle("has_data_attribute", caption="caption", directed=True, curve_style="bezier"))
 
 # Sidebar navigation
-navition_bar()
+navigation_bar()
 
 # Main content
 st.markdown("<h1 style='text-align: center; color: #4CAF50;'>Ontology View</h1>", unsafe_allow_html=True)
@@ -87,9 +99,9 @@ st.markdown("<h1 style='text-align: center; color: #4CAF50;'>Ontology View</h1>"
 # Layout configuration
 col1, col2, col3 = st.columns(3, vertical_alignment="bottom")
 with col1:
-    st.selectbox("Select Layout", LAYOUT_LIST, index=0, key="layout")
+    st.selectbox("Select Layout", LAYOUT_LIST, index=None, key="layout")
 with col2:
-    st.selectbox("Select Edge Style", CURVE_LIST, index=0, key="curve_style", on_change=change_curve_style)
+    st.selectbox("Select Edge Style", CURVE_LIST, index=None, key="curve_style", on_change=change_curve_style)
 with col3:
     st.button("Reset View", type="secondary", on_click=clear_cache, use_container_width=True)
 

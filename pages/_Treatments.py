@@ -3,13 +3,13 @@ from api.neo4j import init_driver
 import re
 from api.dao.treatment import TreatmentDAO
 import plotly.express as px
-from components.navigation_bar import navition_bar
+from components.navigation_bar import navigation_bar
 
 # Page config and icon
 st.set_page_config(layout="wide", page_title="Treatments View", page_icon=":pill:")
 
 # navbar for navigation
-navition_bar()
+navigation_bar()
 
 # Initialize driver
 driver = init_driver()
@@ -47,12 +47,7 @@ if "selected_treatment" not in st.session_state:
 # Function to update filter options
 def update_filter_options(df, treatment_filter):
     for column, value in treatment_filter.items():
-        if column == "organicManagement" or column == "irrigation":
-            if value == True:
-                df = df[df[column] == "Yes"]
-            else:
-                df = df[df[column] == "No"]
-        elif column == 'nitrogenRange':
+        if column == 'nitrogenRange':
             df = df[(df['numericNitrogen'] >= value[0]) & (df['numericNitrogen'] <= value[1])]
         elif value and value != 'Clear':
             df = df[df[column] == value]
@@ -82,10 +77,10 @@ def update_filter(filter_name):
     return callback
 
 # Create filter widgets
-columns = st.columns(3)
+columns = st.columns(5)
 
 with columns[0]:
-    cols = st.tabs(["Filter", "Distribution of Cover Crop"])
+    cols = st.tabs(["Filter", "Distribution"])
     with cols[0]:
         filtered_df = update_filter_options(st.session_state.all_treatments, st.session_state.treatment_filter)
         cover_crops = ['Clear'] + sorted(filtered_df['coverCrop'].unique().tolist())
@@ -96,7 +91,7 @@ with columns[0]:
         st.plotly_chart(fig)
 
 with columns[1]:
-    cols = st.tabs(["Filter", "Distribution of Residue Removal"])
+    cols = st.tabs(["Filter", "Distribution"])
     with cols[0]:
         filtered_df = update_filter_options(st.session_state.all_treatments, st.session_state.treatment_filter)
         residue_removals = ['Clear'] + sorted(filtered_df['residueRemoval'].unique().tolist())
@@ -107,7 +102,7 @@ with columns[1]:
         st.plotly_chart(fig)
 
 with columns[2]:
-    cols = st.tabs(["Filter", "Distribution of Fertilizer Class"])
+    cols = st.tabs(["Filter", "Distribution"])
     with cols[0]:
         filtered_df = update_filter_options(st.session_state.all_treatments, st.session_state.treatment_filter)
         fertilizer_classes = ['Clear'] + sorted(filtered_df['fertilizerAmendmentClass'].unique().tolist())
@@ -116,6 +111,29 @@ with columns[2]:
     with cols[1]:
         fig = px.pie(st.session_state['all_treatments'], names='fertilizerAmendmentClass', title='Fertilizer Class Distribution')
         st.plotly_chart(fig)
+with columns[3]:
+    cols = st.tabs(["Filter", "Distribution"])
+    with cols[0]:
+        filtered_df = update_filter_options(st.session_state.all_treatments, st.session_state.treatment_filter)
+        organic_management = ['Clear'] + sorted(filtered_df['organicManagement'].unique().tolist())
+        index = organic_management.index(st.session_state.treatment_filter['organicManagement']) if st.session_state.treatment_filter['organicManagement'] in organic_management else 0
+        st.selectbox("Select Organic Management:", organic_management, index=index, key='organicManagement', on_change=update_filter('organicManagement'))
+    with cols[1]:
+        fig = px.pie(st.session_state['all_treatments'], names='organicManagement', title='Organic Management Distribution')
+        st.plotly_chart(fig)
+with columns[4]:
+    cols = st.tabs(["Filter", "Distribution"])
+    with cols[0]:
+        filtered_df = update_filter_options(st.session_state.all_treatments, st.session_state.treatment_filter)
+        irrigation = ['Clear'] + sorted(filtered_df['irrigation'].unique().tolist())
+        index = irrigation.index(st.session_state.treatment_filter['irrigation']) if st.session_state.treatment_filter['irrigation'] in irrigation else 0
+        st.selectbox("Select Irrigation:", irrigation, index=index, key='irrigation', on_change=update_filter('irrigation'))
+    with cols[1]:
+        fig = px.pie(st.session_state['all_treatments'], names='irrigation', title='Irrigation Distribution')
+        st.plotly_chart(fig)
+
+# Apply all treatment_filter
+filtered_data = update_filter_options(st.session_state.all_treatments, st.session_state.treatment_filter)
 
 # Add nitrogen amount slider
 st.slider(
@@ -128,20 +146,6 @@ st.slider(
     format="%.2f kgN/ha"
 )
 
-col4, col5 = st.columns(2)
-with col4:
-    st.session_state.treatment_filter["organicManagement"] = st.checkbox(
-        "Treatment Organic Management",
-        value=st.session_state.treatment_filter["organicManagement"],
-    )
-with col5:
-    st.session_state.treatment_filter["irrigation"] = st.checkbox(
-        "Irrigation",
-        value=st.session_state.treatment_filter["irrigation"],
-    )
-
-# Apply all treatment_filter
-filtered_data = update_filter_options(st.session_state.all_treatments, st.session_state.treatment_filter)
 
 col_config = {}
 for column in filtered_data.columns:

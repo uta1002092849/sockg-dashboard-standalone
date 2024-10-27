@@ -2,13 +2,13 @@ import streamlit as st
 import os
 import json
 from datetime import datetime
-from components.navigation_bar import navition_bar
+from components.navigation_bar import navigation_bar
 
 # Page config and icon
 st.set_page_config(layout="wide", page_title="Feedback View", page_icon=":triangular_ruler:")
 
 # Sidebar for navigation
-navition_bar()
+navigation_bar()
 
 # Title
 st.markdown("<h1 style='text-align: center; color: #4CAF50;'>Feedback Form</h1>", unsafe_allow_html=True)

@@ -1,7 +1,7 @@
 from api.neo4j import init_driver
 import streamlit as st
 from api.dao.field import FieldDAO
-from components.navigation_bar import navition_bar
+from components.navigation_bar import navigation_bar
 from components.get_pydeck_chart import get_pydeck_chart
 import pandas as pd
 
@@ -9,12 +9,13 @@ import pandas as pd
 st.set_page_config(layout="wide", page_title="Fields View", page_icon=":national_park:")
 
 # sidebar for navigation
-navition_bar()
+navigation_bar()
 
 # Initialize driver
 driver = init_driver()
 
 st.markdown("<h1 style='text-align: center; color: #4CAF50;'>Field Exploration</h1>", unsafe_allow_html=True)
+
 # Get all fields from the database
 field_dao = FieldDAO(driver)
 ids = field_dao.get_all_ids()
@@ -58,8 +59,6 @@ for _, row in field_info.iterrows():
 
 # Display the constructed field description
 st.info(field_description)
-
-
 
 # Column layout
 col1, col2 = st.columns(2)
@@ -116,34 +115,36 @@ with col2:
         st.info(f"(Latitude, Longitude): ({df['latitude'].values[0]}, {df['longitude'].values[0]})")
         st.pydeck_chart(get_pydeck_chart(df['longitude'].values[0], df['latitude'].values[0]))
 
-# Rainfall data
-st.subheader("Precipitation over Time")
 rainfall_df = field_dao.get_rainfall_df(st.session_state.selected_field)
-
-# Drop rows with missing values
-rainfall_df = rainfall_df.dropna()
-if rainfall_df is not None and not rainfall_df.empty:
-    tab1, tab2 = st.tabs(["Chart", "Data"])
-    
-    with tab1:
-        # Add unit to the y-axis
-        st.bar_chart(rainfall_df, x='Period', y='TotalPrecipitation', use_container_width=True, x_label="Period", y_label="Total Precipitation (cm)")   
-    
-    with tab2:
-        # Calculate average precipitation
-        avg_precipitation = rainfall_df['TotalPrecipitation'].mean()
+# Check if rainfall data is not empty
+if not rainfall_df.empty:
+    st.subheader("Precipitation over Time")
+    # Drop rows with missing values
+    rainfall_df = rainfall_df.dropna()
+    if rainfall_df is not None and not rainfall_df.empty:
+        tab1, tab2 = st.tabs(["Chart", "Data"])
         
-        # Display average precipitation
-        st.metric("Average Precipitation", f"{avg_precipitation:.2f}")
+        with tab1:
+            # Add unit to the y-axis
+            st.bar_chart(rainfall_df, x='Period', y='TotalPrecipitation', use_container_width=True, x_label="Period", y_label="Total Precipitation (cm)")   
         
-        # Display the data table
-        st.dataframe(rainfall_df.style.highlight_max(axis=0), use_container_width=True, hide_index=True)
-else:
-    st.write("No rainfall data available.")
+        with tab2:
+            # Calculate average precipitation
+            avg_precipitation = rainfall_df['TotalPrecipitation'].mean()
+            
+            # Display average precipitation
+            st.metric("Average Precipitation", f"{avg_precipitation:.2f}")
+            
+            # Display the data table
+            st.dataframe(rainfall_df.style.highlight_max(axis=0), use_container_width=True, hide_index=True)
+    else:
+        st.write("No rainfall data available.")
 
 # get all publicaions in a field
 publications_df = field_dao.get_publications(st.session_state.selected_field)
-st.subheader("Publications on Field")
-# drop rows with missing values
-publications_df = publications_df.dropna()
-st.dataframe(publications_df, use_container_width=True)
+# Check if publications are not empty
+if not publications_df.empty:
+    st.subheader("Publications on Field")
+    # Replace None with "Not Available"
+    publications_df = publications_df.fillna("Not Available")
+    st.dataframe(publications_df, use_container_width=True)
