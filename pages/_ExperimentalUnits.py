@@ -5,7 +5,6 @@ from components.navigation_bar import navigation_bar
 import plotly.express as px
 import re
 import pandas as pd
-from streamlit_pandas_profiling import st_profile_report
 pd.options.mode.chained_assignment = None
 
 # Page config and icon

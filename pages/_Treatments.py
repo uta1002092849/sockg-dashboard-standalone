@@ -165,26 +165,27 @@ if st.session_state.treatment_filter['coverCrop'] or st.session_state.treatment_
     filtered_data = filtered_data[["treatmentId", "treatmentDescriptor", "coverCrop", "residueRemoval", "fertilizerAmendmentClass", "organicManagement", "irrigation", "nitrogenTreatmentDescriptor", "numericNitrogen"]]
     
     # Selectable table
-    event = st.dataframe(filtered_data, use_container_width=True, column_config=col_config, on_select='rerun', selection_mode='single-row')
-    selected_row = event.selection.rows
+    st.dataframe(filtered_data, use_container_width=True, column_config=col_config)
+    # event = st.dataframe(filtered_data, use_container_width=True, column_config=col_config, on_select='rerun', selection_mode='single-row')
+    # selected_row = event.selection.rows
 
-    # Get the id of the selected row
-    selected_treatment = filtered_data.loc[selected_row[0], 'treatmentId'] if selected_row else None
+    # # Get the id of the selected row
+    # selected_treatment = filtered_data.loc[selected_row[0], 'treatmentId'] if selected_row else None
 else:
     st.info("Please select a filter to view the treatments.")
 
-if selected_treatment or st.session_state.selected_treatment:
-    if selected_treatment:
-        st.session_state.selected_treatment = selected_treatment
-    st.info(f"Selected Treatment: {st.session_state.selected_treatment}")
+# if selected_treatment or st.session_state.selected_treatment:
+#     if selected_treatment:
+#         st.session_state.selected_treatment = selected_treatment
+#     st.info(f"Selected Treatment: {st.session_state.selected_treatment}")
 
-    # get all nutrient yield for the selected treatment
-    expUnitIds = dao.get_all_expUnit(st.session_state.selected_treatment)
-    # Display all experimental units that belong to the selected treatment
-    st.subheader("Experimental Units:")
-    if not expUnitIds:
-        st.info("No experimental units found.")
-    else:
-        st.info(f"Number of experimental units found: {len(expUnitIds)}")
-        st.write(expUnitIds)
+#     # get all nutrient yield for the selected treatment
+#     expUnitIds = dao.get_all_expUnit(st.session_state.selected_treatment)
+#     # Display all experimental units that belong to the selected treatment
+#     st.subheader("Experimental Units:")
+#     if not expUnitIds:
+#         st.info("No experimental units found.")
+#     else:
+#         st.info(f"Number of experimental units found: {len(expUnitIds)}")
+#         st.write(expUnitIds)
 
