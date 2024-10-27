@@ -22,7 +22,7 @@ class FieldDAO:
     def get_lat_long_dataframe(self, field_id):
         # transaction function
         def get_lat_long(tx):
-            cypher = "MATCH (f:Field {fieldId: $field_id}) RETURN f.fieldLatitude_decimal_deg as latitude, f.fieldLongitude_decimal_deg as longitude"
+            cypher = "MATCH (f:Field {fieldId: $field_id}) RETURN f.latitude_decimal_deg as latitude, f.longitude_decimal_deg as longitude"
             result = tx.run(cypher, field_id=field_id)
             return result.single()
         
@@ -43,7 +43,7 @@ class FieldDAO:
         # transaction function
         def get_rainfall(tx):
             cypher = """MATCH (f:Field {fieldId: $field_id})<-[:weatherAtField]-(w:WeatherObservation)
-                        WITH w.weatherObservationDate AS date, w.precipitation_mm_per_d AS precipitation
+                        WITH w.date AS date, w.precipitation_mm_per_d AS precipitation
                         WITH date, precipitation,
                             toInteger(substring(date, 0, 4)) AS year,
                             toInteger(substring(date, 5, 2)) AS month
@@ -83,8 +83,8 @@ class FieldDAO:
             cypher = """MATCH (f:Field {fieldId: $field_id})<-[:locatedInField]-(u:ExperimentalUnit)
                         RETURN
                             u.expUnitId as id,
-                            u.expUnitStartDate as Start_Date,
-                            u.expUnitEndDate as End_Date,
+                            u.startDate as Start_Date,
+                            u.endDate as End_Date,
                             u.expUnitSize as Size
                         ORDER BY u.expUnitStartDate"""
             result = tx.run(cypher, field_id=field_id)
@@ -98,12 +98,13 @@ class FieldDAO:
     def get_publications(self, field_id):
         # transaction function
         def get_publications(tx):
-            cypher = """MATCH path =(f:Field {fieldId: $field_id})<-[:hasField]-(s:Site)<-[:studiesSite]-(p:Publication)
-RETURN p.publicationTitle as Title,
-p.publicationAuthor as Author,
-p.publicationDate as publicationDate,
-p.publicationIdentifier as Reference
-ORDER BY p.publicationDate"""
+            cypher = """MATCH (f:Field {fieldId: $field_id})<-[:hasField]-(s:Site)<-[:studiesSite]-(p:Publication)
+                RETURN p.title as Title,
+                p.author as Author,
+                p.correspondingAuthor as Corresponding_Author,
+                p.identifier as Reference,
+                p.citation as Citation
+                """
             result = tx.run(cypher, field_id=field_id)
             return result.to_df()
         # execute transaction
