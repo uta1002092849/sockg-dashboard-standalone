@@ -1,0 +1,2035 @@
+[
+  {
+    "data": {
+      "id": "Site",
+      "instance count": 60,
+      "caption": "Site",
+      "label": "Site"
+    },
+    "position": {
+      "x": 653.3916387726765,
+      "y": 403.5801832061698
+    },
+    "group": "nodes",
+    "removed": false,
+    "selected": false,
+    "selectable": true,
+    "locked": false,
+    "grabbable": true,
+    "pannable": false,
+    "classes": ""
+  },
+  {
+    "data": {
+      "id": "WeatherStation",
+      "instance count": 12,
+      "caption": "Weather Station",
+      "label": "Weather Station"
+    },
+    "position": {
+      "x": 545.4683532713906,
+      "y": 492.1999245007906
+    },
+    "group": "nodes",
+    "removed": false,
+    "selected": false,
+    "selectable": true,
+    "locked": false,
+    "grabbable": true,
+    "pannable": false,
+    "classes": ""
+  },
+  {
+    "data": {
+      "id": "ResidueManagementEvent",
+      "instance count": 3308,
+      "caption": "Residue Management Event",
+      "label": "Residue Management Event"
+    },
+    "position": {
+      "x": 289.4186282177017,
+      "y": 498.18371824285094
+    },
+    "group": "nodes",
+    "removed": false,
+    "selected": false,
+    "selectable": true,
+    "locked": false,
+    "grabbable": true,
+    "pannable": false,
+    "classes": ""
+  },
+  {
+    "data": {
+      "id": "Organization",
+      "instance count": 7,
+      "caption": "Organization",
+      "label": "Organization"
+    },
+    "position": {
+      "x": 691.9701742729233,
+      "y": 243.23087217718384
+    },
+    "group": "nodes",
+    "removed": false,
+    "selected": false,
+    "selectable": true,
+    "locked": false,
+    "grabbable": true,
+    "pannable": false,
+    "classes": ""
+  },
+  {
+    "data": {
+      "id": "BioMassEnergy",
+      "instance count": 799,
+      "caption": "Bio Mass Energy",
+      "label": "Bio Mass Energy"
+    },
+    "position": {
+      "x": 154.56474813943447,
+      "y": 390.1845431193314
+    },
+    "group": "nodes",
+    "removed": false,
+    "selected": false,
+    "selectable": true,
+    "locked": false,
+    "grabbable": true,
+    "pannable": false,
+    "classes": ""
+  },
+  {
+    "data": {
+      "id": "PlantingEvent",
+      "instance count": 23450,
+      "caption": "Planting Event",
+      "label": "Planting Event"
+    },
+    "position": {
+      "x": 205.08945050977462,
+      "y": 238.20377635852492
+    },
+    "group": "nodes",
+    "removed": false,
+    "selected": false,
+    "selectable": true,
+    "locked": false,
+    "grabbable": true,
+    "pannable": false,
+    "classes": ""
+  },
+  {
+    "data": {
+      "id": "County",
+      "instance count": 33,
+      "caption": "County",
+      "label": "County"
+    },
+    "position": {
+      "x": 798.0118723605475,
+      "y": 484.71458924161624
+    },
+    "group": "nodes",
+    "removed": false,
+    "selected": false,
+    "selectable": true,
+    "locked": false,
+    "grabbable": true,
+    "pannable": false,
+    "classes": ""
+  },
+  {
+    "data": {
+      "id": "Harvest",
+      "instance count": 18356,
+      "caption": "Harvest",
+      "label": "Harvest"
+    },
+    "position": {
+      "x": 177.24795110006016,
+      "y": 272.6058669416712
+    },
+    "group": "nodes",
+    "removed": false,
+    "selected": false,
+    "selectable": true,
+    "locked": false,
+    "grabbable": true,
+    "pannable": false,
+    "classes": ""
+  },
+  {
+    "data": {
+      "id": "NutrientEfficiency",
+      "instance count": 2791,
+      "caption": "Nutrient Efficiency",
+      "label": "Nutrient Efficiency"
+    },
+    "position": {
+      "x": 527.664543409775,
+      "y": 174.957786263591
+    },
+    "group": "nodes",
+    "removed": false,
+    "selected": false,
+    "selectable": true,
+    "locked": false,
+    "grabbable": true,
+    "pannable": false,
+    "classes": ""
+  },
+  {
+    "data": {
+      "id": "WaterQualityConc",
+      "instance count": 1479,
+      "caption": "Water Quality Conc",
+      "label": "Water Quality Conc"
+    },
+    "position": {
+      "x": 425.8208125445531,
+      "y": 325.35854380430806
+    },
+    "group": "nodes",
+    "removed": false,
+    "selected": false,
+    "selectable": true,
+    "locked": false,
+    "grabbable": true,
+    "pannable": false,
+    "classes": ""
+  },
+  {
+    "data": {
+      "id": "GasNutrientLoss",
+      "instance count": 748,
+      "caption": "Gas Nutrient Loss",
+      "label": "Gas Nutrient Loss"
+    },
+    "position": {
+      "x": 246.18733946084222,
+      "y": 491.6011882013657
+    },
+    "group": "nodes",
+    "removed": false,
+    "selected": false,
+    "selectable": true,
+    "locked": false,
+    "grabbable": true,
+    "pannable": false,
+    "classes": ""
+  },
+  {
+    "data": {
+      "id": "Field",
+      "instance count": 58,
+      "caption": "Field",
+      "label": "Field"
+    },
+    "position": {
+      "x": 545.2850763718955,
+      "y": 405.0316504650329
+    },
+    "group": "nodes",
+    "removed": false,
+    "selected": false,
+    "selectable": true,
+    "locked": false,
+    "grabbable": true,
+    "pannable": false,
+    "classes": ""
+  },
+  {
+    "data": {
+      "id": "SoilChemicalSample",
+      "instance count": 53833,
+      "caption": "Soil Chemical Sample",
+      "label": "Soil Chemical Sample"
+    },
+    "position": {
+      "x": 343.96743151408384,
+      "y": 220.93036299937933
+    },
+    "group": "nodes",
+    "removed": false,
+    "selected": false,
+    "selectable": true,
+    "locked": false,
+    "grabbable": true,
+    "pannable": false,
+    "classes": ""
+  },
+  {
+    "data": {
+      "id": "BioMassMineral",
+      "instance count": 6723,
+      "caption": "Bio Mass Mineral",
+      "label": "Bio Mass Mineral"
+    },
+    "position": {
+      "x": 397.29818976889135,
+      "y": 462.5834627620049
+    },
+    "group": "nodes",
+    "removed": false,
+    "selected": false,
+    "selectable": true,
+    "locked": false,
+    "grabbable": true,
+    "pannable": false,
+    "classes": ""
+  },
+  {
+    "data": {
+      "id": "Department",
+      "instance count": 33,
+      "caption": "Department",
+      "label": "Department"
+    },
+    "position": {
+      "x": 673.8226131756759,
+      "y": 174.29295913134925
+    },
+    "group": "nodes",
+    "removed": false,
+    "selected": false,
+    "selectable": true,
+    "locked": false,
+    "grabbable": true,
+    "pannable": false,
+    "classes": ""
+  },
+  {
+    "data": {
+      "id": "Amendment",
+      "instance count": 37796,
+      "caption": "Amendment",
+      "label": "Amendment"
+    },
+    "position": {
+      "x": 207.77155954645917,
+      "y": 478.50459353081806
+    },
+    "group": "nodes",
+    "removed": false,
+    "selected": false,
+    "selectable": true,
+    "locked": false,
+    "grabbable": true,
+    "pannable": false,
+    "classes": ""
+  },
+  {
+    "data": {
+      "id": "Pesticide",
+      "instance count": 356,
+      "caption": "Pesticide",
+      "label": "Pesticide"
+    },
+    "position": {
+      "x": 158.82463191273652,
+      "y": 528.249961794996
+    },
+    "group": "nodes",
+    "removed": false,
+    "selected": false,
+    "selectable": true,
+    "locked": false,
+    "grabbable": true,
+    "pannable": false,
+    "classes": ""
+  },
+  {
+    "data": {
+      "id": "Version",
+      "instance count": 1,
+      "caption": "Version",
+      "label": "Version"
+    },
+    "position": {
+      "x": 445.75119457191147,
+      "y": 141.57399631148598
+    },
+    "group": "nodes",
+    "removed": false,
+    "selected": false,
+    "selectable": true,
+    "locked": false,
+    "grabbable": true,
+    "pannable": false,
+    "classes": ""
+  },
+  {
+    "data": {
+      "id": "ResearchUnit",
+      "instance count": 0,
+      "caption": "Research Unit",
+      "label": "Research Unit"
+    },
+    "position": {
+      "x": 445.9607789325321,
+      "y": 173.57023534705004
+    },
+    "group": "nodes",
+    "removed": false,
+    "selected": false,
+    "selectable": true,
+    "locked": false,
+    "grabbable": true,
+    "pannable": false,
+    "classes": ""
+  },
+  {
+    "data": {
+      "id": "Tillage",
+      "instance count": 27137,
+      "caption": "Tillage",
+      "label": "Tillage"
+    },
+    "position": {
+      "x": 369.5528922102768,
+      "y": 482.56305218927275
+    },
+    "group": "nodes",
+    "removed": false,
+    "selected": false,
+    "selectable": true,
+    "locked": false,
+    "grabbable": true,
+    "pannable": false,
+    "classes": ""
+  },
+  {
+    "data": {
+      "id": "HarvestFraction",
+      "instance count": 9470,
+      "caption": "Harvest Fraction",
+      "label": "Harvest Fraction"
+    },
+    "position": {
+      "x": 160.37053576905214,
+      "y": 312.10603785081383
+    },
+    "group": "nodes",
+    "removed": false,
+    "selected": false,
+    "selectable": true,
+    "locked": false,
+    "grabbable": true,
+    "pannable": false,
+    "classes": ""
+  },
+  {
+    "data": {
+      "id": "Book",
+      "instance count": 2,
+      "caption": "Book",
+      "label": "Book"
+    },
+    "position": {
+      "x": 486.91176996634266,
+      "y": 141.77787167960767
+    },
+    "group": "nodes",
+    "removed": false,
+    "selected": false,
+    "selectable": true,
+    "locked": false,
+    "grabbable": true,
+    "pannable": false,
+    "classes": ""
+  },
+  {
+    "data": {
+      "id": "WindErosionArea",
+      "instance count": 15,
+      "caption": "Wind Erosion Area",
+      "label": "Wind Erosion Area"
+    },
+    "position": {
+      "x": 419.990482124507,
+      "y": 437.0517988912794
+    },
+    "group": "nodes",
+    "removed": false,
+    "selected": false,
+    "selectable": true,
+    "locked": false,
+    "grabbable": true,
+    "pannable": false,
+    "classes": ""
+  },
+  {
+    "data": {
+      "id": "WeatherObservation",
+      "instance count": 147305,
+      "caption": "Weather Observation",
+      "label": "Weather Observation"
+    },
+    "position": {
+      "x": 657.6622291345984,
+      "y": 491.2168616923123
+    },
+    "group": "nodes",
+    "removed": false,
+    "selected": false,
+    "selectable": true,
+    "locked": false,
+    "grabbable": true,
+    "pannable": false,
+    "classes": ""
+  },
+  {
+    "data": {
+      "id": "GrazingManagementEvent",
+      "instance count": 1951,
+      "caption": "Grazing Management Event",
+      "label": "Grazing Management Event"
+    },
+    "position": {
+      "x": 332.77873830081126,
+      "y": 495.36224917460754
+    },
+    "group": "nodes",
+    "removed": false,
+    "selected": false,
+    "selectable": true,
+    "locked": false,
+    "grabbable": true,
+    "pannable": false,
+    "classes": ""
+  },
+  {
+    "data": {
+      "id": "CropGrowthStage",
+      "instance count": 4896,
+      "caption": "Crop Growth Stage",
+      "label": "Crop Growth Stage"
+    },
+    "position": {
+      "x": 152.99006398082747,
+      "y": 352.89669193249074
+    },
+    "group": "nodes",
+    "removed": false,
+    "selected": false,
+    "selectable": true,
+    "locked": false,
+    "grabbable": true,
+    "pannable": false,
+    "classes": ""
+  },
+  {
+    "data": {
+      "id": "Experiment",
+      "instance count": 55,
+      "caption": "Experiment",
+      "label": "Experiment"
+    },
+    "position": {
+      "x": 650.2740422128816,
+      "y": 305.30527071529144
+    },
+    "group": "nodes",
+    "removed": false,
+    "selected": false,
+    "selectable": true,
+    "locked": false,
+    "grabbable": true,
+    "pannable": false,
+    "classes": ""
+  },
+  {
+    "data": {
+      "id": "GasSample",
+      "instance count": 107354,
+      "caption": "Gas Sample",
+      "label": "Gas Sample"
+    },
+    "position": {
+      "x": 182.41884894112553,
+      "y": 454.74701431868397
+    },
+    "group": "nodes",
+    "removed": false,
+    "selected": false,
+    "selectable": true,
+    "locked": false,
+    "grabbable": true,
+    "pannable": false,
+    "classes": ""
+  },
+  {
+    "data": {
+      "id": "SoilCover",
+      "instance count": 1034,
+      "caption": "Soil Cover",
+      "label": "Soil Cover"
+    },
+    "position": {
+      "x": 524.8421892900501,
+      "y": 141.74162823815607
+    },
+    "group": "nodes",
+    "removed": false,
+    "selected": false,
+    "selectable": true,
+    "locked": false,
+    "grabbable": true,
+    "pannable": false,
+    "classes": ""
+  },
+  {
+    "data": {
+      "id": "Publication",
+      "instance count": 114,
+      "caption": "Publication",
+      "label": "Publication"
+    },
+    "position": {
+      "x": 794.6217069121398,
+      "y": 314.0126146414144
+    },
+    "group": "nodes",
+    "removed": false,
+    "selected": false,
+    "selectable": true,
+    "locked": false,
+    "grabbable": true,
+    "pannable": false,
+    "classes": ""
+  },
+  {
+    "data": {
+      "id": "SoilBiologicalSample",
+      "instance count": 18222,
+      "caption": "Soil Biological Sample",
+      "label": "Soil Biological Sample"
+    },
+    "position": {
+      "x": 297.94771039285547,
+      "y": 213.5060667223242
+    },
+    "group": "nodes",
+    "removed": false,
+    "selected": false,
+    "selectable": true,
+    "locked": false,
+    "grabbable": true,
+    "pannable": false,
+    "classes": ""
+  },
+  {
+    "data": {
+      "id": "ExperimentalUnit",
+      "instance count": 3809,
+      "caption": "Experimental Unit",
+      "label": "Experimental Unit"
+    },
+    "position": {
+      "x": 291.9972535653441,
+      "y": 351.29988178922446
+    },
+    "group": "nodes",
+    "removed": false,
+    "selected": false,
+    "selectable": true,
+    "locked": false,
+    "grabbable": true,
+    "pannable": false,
+    "classes": ""
+  },
+  {
+    "data": {
+      "id": "City",
+      "instance count": 33,
+      "caption": "City",
+      "label": "City"
+    },
+    "position": {
+      "x": 756.0276635552038,
+      "y": 523.3885747631849
+    },
+    "group": "nodes",
+    "removed": false,
+    "selected": false,
+    "selectable": true,
+    "locked": false,
+    "grabbable": true,
+    "pannable": false,
+    "classes": ""
+  },
+  {
+    "data": {
+      "id": "SoilPhysicalSample",
+      "instance count": 28082,
+      "caption": "Soil Physical Sample",
+      "label": "Soil Physical Sample"
+    },
+    "position": {
+      "x": 162.49570143438442,
+      "y": 426.51733864068564
+    },
+    "group": "nodes",
+    "removed": false,
+    "selected": false,
+    "selectable": true,
+    "locked": false,
+    "grabbable": true,
+    "pannable": false,
+    "classes": ""
+  },
+  {
+    "data": {
+      "id": "Grazing",
+      "instance count": 6995,
+      "caption": "Grazing",
+      "label": "Grazing"
+    },
+    "position": {
+      "x": 252.2058333070056,
+      "y": 218.3136175419042
+    },
+    "group": "nodes",
+    "removed": false,
+    "selected": false,
+    "selectable": true,
+    "locked": false,
+    "grabbable": true,
+    "pannable": false,
+    "classes": ""
+  },
+  {
+    "data": {
+      "id": "Rotation",
+      "instance count": 66,
+      "caption": "Rotation",
+      "label": "Rotation"
+    },
+    "position": {
+      "x": 533.6154960627283,
+      "y": 239.17904391785677
+    },
+    "group": "nodes",
+    "removed": false,
+    "selected": false,
+    "selectable": true,
+    "locked": false,
+    "grabbable": true,
+    "pannable": false,
+    "classes": ""
+  },
+  {
+    "data": {
+      "id": "MiscellaneousMeasurement",
+      "instance count": 0,
+      "caption": "Miscellaneous Measurement",
+      "label": "Miscellaneous Measurement"
+    },
+    "position": {
+      "x": 559.4139006265257,
+      "y": 140.33554019633917
+    },
+    "group": "nodes",
+    "removed": false,
+    "selected": false,
+    "selectable": true,
+    "locked": false,
+    "grabbable": true,
+    "pannable": false,
+    "classes": ""
+  },
+  {
+    "data": {
+      "id": "WaterQualityArea",
+      "instance count": 667,
+      "caption": "Water Quality Area",
+      "label": "Water Quality Area"
+    },
+    "position": {
+      "x": 428.5268710402021,
+      "y": 395.98134625246206
+    },
+    "group": "nodes",
+    "removed": false,
+    "selected": false,
+    "selectable": true,
+    "locked": false,
+    "grabbable": true,
+    "pannable": false,
+    "classes": ""
+  },
+  {
+    "data": {
+      "id": "Project",
+      "instance count": 9,
+      "caption": "Project",
+      "label": "Project"
+    },
+    "position": {
+      "x": 564.8621057606646,
+      "y": 177.94826253912723
+    },
+    "group": "nodes",
+    "removed": false,
+    "selected": false,
+    "selectable": true,
+    "locked": false,
+    "grabbable": true,
+    "pannable": false,
+    "classes": ""
+  },
+  {
+    "data": {
+      "id": "Treatment",
+      "instance count": 769,
+      "caption": "Treatment",
+      "label": "Treatment"
+    },
+    "position": {
+      "x": 535.3267326802103,
+      "y": 305.2118906350886
+    },
+    "group": "nodes",
+    "removed": false,
+    "selected": false,
+    "selectable": true,
+    "locked": false,
+    "grabbable": true,
+    "pannable": false,
+    "classes": ""
+  },
+  {
+    "data": {
+      "id": "State",
+      "instance count": 20,
+      "caption": "State",
+      "label": "State"
+    },
+    "position": {
+      "x": 818.0108024229364,
+      "y": 422.370392685931
+    },
+    "group": "nodes",
+    "removed": false,
+    "selected": false,
+    "selectable": true,
+    "locked": false,
+    "grabbable": true,
+    "pannable": false,
+    "classes": ""
+  },
+  {
+    "data": {
+      "id": "YieldNutrientUptake",
+      "instance count": 429,
+      "caption": "Yield Nutrient Uptake",
+      "label": "Yield Nutrient Uptake"
+    },
+    "position": {
+      "x": 417.90059862151634,
+      "y": 283.773133168235
+    },
+    "group": "nodes",
+    "removed": false,
+    "selected": false,
+    "selectable": true,
+    "locked": false,
+    "grabbable": true,
+    "pannable": false,
+    "classes": ""
+  },
+  {
+    "data": {
+      "id": "Soil",
+      "instance count": 0,
+      "caption": "Soil",
+      "label": "Soil"
+    },
+    "position": {
+      "x": 487.8551400349313,
+      "y": 175.72515503541803
+    },
+    "group": "nodes",
+    "removed": false,
+    "selected": false,
+    "selectable": true,
+    "locked": false,
+    "grabbable": true,
+    "pannable": false,
+    "classes": ""
+  },
+  {
+    "data": {
+      "id": "Country",
+      "instance count": 3,
+      "caption": "Country",
+      "label": "Country"
+    },
+    "position": {
+      "x": 806.0227833833319,
+      "y": 350.2677624870089
+    },
+    "group": "nodes",
+    "removed": false,
+    "selected": false,
+    "selectable": true,
+    "locked": false,
+    "grabbable": true,
+    "pannable": false,
+    "classes": ""
+  },
+  {
+    "data": {
+      "id": "BioMassCarbohydrate",
+      "instance count": 1367,
+      "caption": "Bio Mass Carbohydrate",
+      "label": "Bio Mass Carbohydrate"
+    },
+    "position": {
+      "x": 386.3554645186663,
+      "y": 240.95894850769469
+    },
+    "group": "nodes",
+    "removed": false,
+    "selected": false,
+    "selectable": true,
+    "locked": false,
+    "grabbable": true,
+    "pannable": false,
+    "classes": ""
+  },
+  {
+    "data": {
+      "id": "Person",
+      "instance count": 98,
+      "caption": "Person",
+      "label": "Person"
+    },
+    "position": {
+      "x": 765.6214952525262,
+      "y": 219.8822684167614
+    },
+    "group": "nodes",
+    "removed": false,
+    "selected": false,
+    "selectable": true,
+    "locked": false,
+    "grabbable": true,
+    "pannable": false,
+    "classes": ""
+  },
+  {
+    "data": {
+      "id": "hasTreatment",
+      "caption": "Has Treatment",
+      "label": "Has Treatment",
+      "source": "Experiment",
+      "target": "Treatment"
+    },
+    "position": {
+      "x": 0,
+      "y": 0
+    },
+    "group": "edges",
+    "removed": false,
+    "selected": false,
+    "selectable": true,
+    "locked": false,
+    "grabbable": true,
+    "pannable": true,
+    "classes": ""
+  },
+  {
+    "data": {
+      "id": "yieldNutrUptakeTreatment",
+      "caption": "Yield Nutr Uptake Treatment",
+      "label": "Yield Nutr Uptake Treatment",
+      "source": "YieldNutrientUptake",
+      "target": "Treatment"
+    },
+    "position": {
+      "x": 0,
+      "y": 0
+    },
+    "group": "edges",
+    "removed": false,
+    "selected": false,
+    "selectable": true,
+    "locked": false,
+    "grabbable": true,
+    "pannable": true,
+    "classes": ""
+  },
+  {
+    "data": {
+      "id": "plantingAt",
+      "caption": "Planting At",
+      "label": "Planting At",
+      "source": "PlantingEvent",
+      "target": "ExperimentalUnit"
+    },
+    "position": {
+      "x": 0,
+      "y": 0
+    },
+    "group": "edges",
+    "removed": false,
+    "selected": false,
+    "selectable": true,
+    "locked": false,
+    "grabbable": true,
+    "pannable": true,
+    "classes": ""
+  },
+  {
+    "data": {
+      "id": "hasGasNutrientData",
+      "caption": "Has Gas Nutrient Data",
+      "label": "Has Gas Nutrient Data",
+      "source": "GasNutrientLoss",
+      "target": "ExperimentalUnit"
+    },
+    "position": {
+      "x": 0,
+      "y": 0
+    },
+    "group": "edges",
+    "removed": false,
+    "selected": false,
+    "selectable": true,
+    "locked": false,
+    "grabbable": true,
+    "pannable": true,
+    "classes": ""
+  },
+  {
+    "data": {
+      "id": "hasBioSample",
+      "caption": "Has Bio Sample",
+      "label": "Has Bio Sample",
+      "source": "ExperimentalUnit",
+      "target": "SoilBiologicalSample"
+    },
+    "position": {
+      "x": 0,
+      "y": 0
+    },
+    "group": "edges",
+    "removed": false,
+    "selected": false,
+    "selectable": true,
+    "locked": false,
+    "grabbable": true,
+    "pannable": true,
+    "classes": ""
+  },
+  {
+    "data": {
+      "id": "hasBioMassCarbohydrateData",
+      "caption": "Has Bio Mass Carbohydrate Data",
+      "label": "Has Bio Mass Carbohydrate Data",
+      "source": "ExperimentalUnit",
+      "target": "BioMassCarbohydrate"
+    },
+    "position": {
+      "x": 0,
+      "y": 0
+    },
+    "group": "edges",
+    "removed": false,
+    "selected": false,
+    "selectable": true,
+    "locked": false,
+    "grabbable": true,
+    "pannable": true,
+    "classes": ""
+  },
+  {
+    "data": {
+      "id": "studiesSite",
+      "caption": "Studies Site",
+      "label": "Studies Site",
+      "source": "Publication",
+      "target": "Site"
+    },
+    "position": {
+      "x": 0,
+      "y": 0
+    },
+    "group": "edges",
+    "removed": false,
+    "selected": false,
+    "selectable": true,
+    "locked": false,
+    "grabbable": true,
+    "pannable": true,
+    "classes": ""
+  },
+  {
+    "data": {
+      "id": "hasBioMassEnergyData",
+      "caption": "Has Bio Mass Energy Data",
+      "label": "Has Bio Mass Energy Data",
+      "source": "ExperimentalUnit",
+      "target": "BioMassEnergy"
+    },
+    "position": {
+      "x": 0,
+      "y": 0
+    },
+    "group": "edges",
+    "removed": false,
+    "selected": false,
+    "selectable": true,
+    "locked": false,
+    "grabbable": true,
+    "pannable": true,
+    "classes": ""
+  },
+  {
+    "data": {
+      "id": "worksAtDepartment",
+      "caption": "Works At Department",
+      "label": "Works At Department",
+      "source": "Person",
+      "target": "Department"
+    },
+    "position": {
+      "x": 0,
+      "y": 0
+    },
+    "group": "edges",
+    "removed": false,
+    "selected": false,
+    "selectable": true,
+    "locked": false,
+    "grabbable": true,
+    "pannable": true,
+    "classes": ""
+  },
+  {
+    "data": {
+      "id": "hasGrazingData",
+      "caption": "Has Grazing Data",
+      "label": "Has Grazing Data",
+      "source": "ExperimentalUnit",
+      "target": "Grazing"
+    },
+    "position": {
+      "x": 0,
+      "y": 0
+    },
+    "group": "edges",
+    "removed": false,
+    "selected": false,
+    "selectable": true,
+    "locked": false,
+    "grabbable": true,
+    "pannable": true,
+    "classes": ""
+  },
+  {
+    "data": {
+      "id": "locatedInCounty",
+      "caption": "Located In County",
+      "label": "Located In County",
+      "source": "Site",
+      "target": "County"
+    },
+    "position": {
+      "x": 0,
+      "y": 0
+    },
+    "group": "edges",
+    "removed": false,
+    "selected": false,
+    "selectable": true,
+    "locked": false,
+    "grabbable": true,
+    "pannable": true,
+    "classes": ""
+  },
+  {
+    "data": {
+      "id": "fundsExperiment",
+      "caption": "Funds Experiment",
+      "label": "Funds Experiment",
+      "source": "Organization",
+      "target": "Experiment"
+    },
+    "position": {
+      "x": 0,
+      "y": 0
+    },
+    "group": "edges",
+    "removed": false,
+    "selected": false,
+    "selectable": true,
+    "locked": false,
+    "grabbable": true,
+    "pannable": true,
+    "classes": ""
+  },
+  {
+    "data": {
+      "id": "locatedInState",
+      "caption": "Located In State",
+      "label": "Located In State",
+      "source": "Site",
+      "target": "State"
+    },
+    "position": {
+      "x": 0,
+      "y": 0
+    },
+    "group": "edges",
+    "removed": false,
+    "selected": false,
+    "selectable": true,
+    "locked": false,
+    "grabbable": true,
+    "pannable": true,
+    "classes": ""
+  },
+  {
+    "data": {
+      "id": "tracksGrowth",
+      "caption": "Tracks Growth",
+      "label": "Tracks Growth",
+      "source": "ExperimentalUnit",
+      "target": "CropGrowthStage"
+    },
+    "position": {
+      "x": 0,
+      "y": 0
+    },
+    "group": "edges",
+    "removed": false,
+    "selected": false,
+    "selectable": true,
+    "locked": false,
+    "grabbable": true,
+    "pannable": true,
+    "classes": ""
+  },
+  {
+    "data": {
+      "id": "hasCity",
+      "caption": "Has City",
+      "label": "Has City",
+      "source": "County",
+      "target": "City"
+    },
+    "position": {
+      "x": 0,
+      "y": 0
+    },
+    "group": "edges",
+    "removed": false,
+    "selected": false,
+    "selectable": true,
+    "locked": false,
+    "grabbable": true,
+    "pannable": true,
+    "classes": ""
+  },
+  {
+    "data": {
+      "id": "hasWaterQualityConcData",
+      "caption": "Has Water Quality Conc Data",
+      "label": "Has Water Quality Conc Data",
+      "source": "WaterQualityConc",
+      "target": "ExperimentalUnit"
+    },
+    "position": {
+      "x": 0,
+      "y": 0
+    },
+    "group": "edges",
+    "removed": false,
+    "selected": false,
+    "selectable": true,
+    "locked": false,
+    "grabbable": true,
+    "pannable": true,
+    "classes": ""
+  },
+  {
+    "data": {
+      "id": "hasResidueManagementEvent",
+      "caption": "Has Residue Management Event",
+      "label": "Has Residue Management Event",
+      "source": "ExperimentalUnit",
+      "target": "ResidueManagementEvent"
+    },
+    "position": {
+      "x": 0,
+      "y": 0
+    },
+    "group": "edges",
+    "removed": false,
+    "selected": false,
+    "selectable": true,
+    "locked": false,
+    "grabbable": true,
+    "pannable": true,
+    "classes": ""
+  },
+  {
+    "data": {
+      "id": "hasWindErosionData",
+      "caption": "Has Wind Erosion Data",
+      "label": "Has Wind Erosion Data",
+      "source": "WindErosionArea",
+      "target": "ExperimentalUnit"
+    },
+    "position": {
+      "x": 0,
+      "y": 0
+    },
+    "group": "edges",
+    "removed": false,
+    "selected": false,
+    "selectable": true,
+    "locked": false,
+    "grabbable": true,
+    "pannable": true,
+    "classes": ""
+  },
+  {
+    "data": {
+      "id": "hasState",
+      "caption": "Has State",
+      "label": "Has State",
+      "source": "Country",
+      "target": "State"
+    },
+    "position": {
+      "x": 0,
+      "y": 0
+    },
+    "group": "edges",
+    "removed": false,
+    "selected": false,
+    "selectable": true,
+    "locked": false,
+    "grabbable": true,
+    "pannable": true,
+    "classes": ""
+  },
+  {
+    "data": {
+      "id": "waterQualityAreaDataAt",
+      "caption": "Water Quality Area Data At",
+      "label": "Water Quality Area Data At",
+      "source": "WaterQualityArea",
+      "target": "Field"
+    },
+    "position": {
+      "x": 0,
+      "y": 0
+    },
+    "group": "edges",
+    "removed": false,
+    "selected": false,
+    "selectable": true,
+    "locked": false,
+    "grabbable": true,
+    "pannable": true,
+    "classes": ""
+  },
+  {
+    "data": {
+      "id": "worksIn",
+      "caption": "Works In",
+      "label": "Works In",
+      "source": "Person",
+      "target": "Site"
+    },
+    "position": {
+      "x": 0,
+      "y": 0
+    },
+    "group": "edges",
+    "removed": false,
+    "selected": false,
+    "selectable": true,
+    "locked": false,
+    "grabbable": true,
+    "pannable": true,
+    "classes": ""
+  },
+  {
+    "data": {
+      "id": "hasCounty",
+      "caption": "Has County",
+      "label": "Has County",
+      "source": "State",
+      "target": "County"
+    },
+    "position": {
+      "x": 0,
+      "y": 0
+    },
+    "group": "edges",
+    "removed": false,
+    "selected": false,
+    "selectable": true,
+    "locked": false,
+    "grabbable": true,
+    "pannable": true,
+    "classes": ""
+  },
+  {
+    "data": {
+      "id": "yieldNutrUptakeDataAt",
+      "caption": "Yield Nutr Uptake Data At",
+      "label": "Yield Nutr Uptake Data At",
+      "source": "YieldNutrientUptake",
+      "target": "Field"
+    },
+    "position": {
+      "x": 0,
+      "y": 0
+    },
+    "group": "edges",
+    "removed": false,
+    "selected": false,
+    "selectable": true,
+    "locked": false,
+    "grabbable": true,
+    "pannable": true,
+    "classes": ""
+  },
+  {
+    "data": {
+      "id": "locatedInCity",
+      "caption": "Located In City",
+      "label": "Located In City",
+      "source": "Site",
+      "target": "City"
+    },
+    "position": {
+      "x": 0,
+      "y": 0
+    },
+    "group": "edges",
+    "removed": false,
+    "selected": false,
+    "selectable": true,
+    "locked": false,
+    "grabbable": true,
+    "pannable": true,
+    "classes": ""
+  },
+  {
+    "data": {
+      "id": "weatherAtField",
+      "caption": "Weather At Field",
+      "label": "Weather At Field",
+      "source": "WeatherObservation",
+      "target": "Field"
+    },
+    "position": {
+      "x": 0,
+      "y": 0
+    },
+    "group": "edges",
+    "removed": false,
+    "selected": false,
+    "selectable": true,
+    "locked": false,
+    "grabbable": true,
+    "pannable": true,
+    "classes": ""
+  },
+  {
+    "data": {
+      "id": "windErosionTreatment",
+      "caption": "Wind Erosion Treatment",
+      "label": "Wind Erosion Treatment",
+      "source": "WindErosionArea",
+      "target": "Treatment"
+    },
+    "position": {
+      "x": 0,
+      "y": 0
+    },
+    "group": "edges",
+    "removed": false,
+    "selected": false,
+    "selectable": true,
+    "locked": false,
+    "grabbable": true,
+    "pannable": true,
+    "classes": ""
+  },
+  {
+    "data": {
+      "id": "hasPhySample",
+      "caption": "Has Phy Sample",
+      "label": "Has Phy Sample",
+      "source": "ExperimentalUnit",
+      "target": "SoilPhysicalSample"
+    },
+    "position": {
+      "x": 0,
+      "y": 0
+    },
+    "group": "edges",
+    "removed": false,
+    "selected": false,
+    "selectable": true,
+    "locked": false,
+    "grabbable": true,
+    "pannable": true,
+    "classes": ""
+  },
+  {
+    "data": {
+      "id": "isHarvested",
+      "caption": "Is Harvested",
+      "label": "Is Harvested",
+      "source": "ExperimentalUnit",
+      "target": "Harvest"
+    },
+    "position": {
+      "x": 0,
+      "y": 0
+    },
+    "group": "edges",
+    "removed": false,
+    "selected": false,
+    "selectable": true,
+    "locked": false,
+    "grabbable": true,
+    "pannable": true,
+    "classes": ""
+  },
+  {
+    "data": {
+      "id": "hasHarvestFractionData",
+      "caption": "Has Harvest Fraction Data",
+      "label": "Has Harvest Fraction Data",
+      "source": "ExperimentalUnit",
+      "target": "HarvestFraction"
+    },
+    "position": {
+      "x": 0,
+      "y": 0
+    },
+    "group": "edges",
+    "removed": false,
+    "selected": false,
+    "selectable": true,
+    "locked": false,
+    "grabbable": true,
+    "pannable": true,
+    "classes": ""
+  },
+  {
+    "data": {
+      "id": "hasYieldNutrUptakeData",
+      "caption": "Has Yield Nutr Uptake Data",
+      "label": "Has Yield Nutr Uptake Data",
+      "source": "YieldNutrientUptake",
+      "target": "ExperimentalUnit"
+    },
+    "position": {
+      "x": 0,
+      "y": 0
+    },
+    "group": "edges",
+    "removed": false,
+    "selected": false,
+    "selectable": true,
+    "locked": false,
+    "grabbable": true,
+    "pannable": true,
+    "classes": ""
+  },
+  {
+    "data": {
+      "id": "departmentOf",
+      "caption": "Department Of",
+      "label": "Department Of",
+      "source": "Department",
+      "target": "Organization"
+    },
+    "position": {
+      "x": 0,
+      "y": 0
+    },
+    "group": "edges",
+    "removed": false,
+    "selected": false,
+    "selectable": true,
+    "locked": false,
+    "grabbable": true,
+    "pannable": true,
+    "classes": ""
+  },
+  {
+    "data": {
+      "id": "worksFor",
+      "caption": "Works For",
+      "label": "Works For",
+      "source": "Person",
+      "target": "Organization"
+    },
+    "position": {
+      "x": 0,
+      "y": 0
+    },
+    "group": "edges",
+    "removed": false,
+    "selected": false,
+    "selectable": true,
+    "locked": false,
+    "grabbable": true,
+    "pannable": true,
+    "classes": ""
+  },
+  {
+    "data": {
+      "id": "hasChemSample",
+      "caption": "Has Chem Sample",
+      "label": "Has Chem Sample",
+      "source": "ExperimentalUnit",
+      "target": "SoilChemicalSample"
+    },
+    "position": {
+      "x": 0,
+      "y": 0
+    },
+    "group": "edges",
+    "removed": false,
+    "selected": false,
+    "selectable": true,
+    "locked": false,
+    "grabbable": true,
+    "pannable": true,
+    "classes": ""
+  },
+  {
+    "data": {
+      "id": "hasGrazingManagementEvent",
+      "caption": "Has Grazing Management Event",
+      "label": "Has Grazing Management Event",
+      "source": "ExperimentalUnit",
+      "target": "GrazingManagementEvent"
+    },
+    "position": {
+      "x": 0,
+      "y": 0
+    },
+    "group": "edges",
+    "removed": false,
+    "selected": false,
+    "selectable": true,
+    "locked": false,
+    "grabbable": true,
+    "pannable": true,
+    "classes": ""
+  },
+  {
+    "data": {
+      "id": "recordsWeatherForSite",
+      "caption": "Records Weather For Site",
+      "label": "Records Weather For Site",
+      "source": "WeatherStation",
+      "target": "Site"
+    },
+    "position": {
+      "x": 0,
+      "y": 0
+    },
+    "group": "edges",
+    "removed": false,
+    "selected": false,
+    "selectable": true,
+    "locked": false,
+    "grabbable": true,
+    "pannable": true,
+    "classes": ""
+  },
+  {
+    "data": {
+      "id": "windErosionDataAt",
+      "caption": "Wind Erosion Data At",
+      "label": "Wind Erosion Data At",
+      "source": "WindErosionArea",
+      "target": "Field"
+    },
+    "position": {
+      "x": 0,
+      "y": 0
+    },
+    "group": "edges",
+    "removed": false,
+    "selected": false,
+    "selectable": true,
+    "locked": false,
+    "grabbable": true,
+    "pannable": true,
+    "classes": ""
+  },
+  {
+    "data": {
+      "id": "hasBioMassMineralData",
+      "caption": "Has Bio Mass Mineral Data",
+      "label": "Has Bio Mass Mineral Data",
+      "source": "ExperimentalUnit",
+      "target": "BioMassMineral"
+    },
+    "position": {
+      "x": 0,
+      "y": 0
+    },
+    "group": "edges",
+    "removed": false,
+    "selected": false,
+    "selectable": true,
+    "locked": false,
+    "grabbable": true,
+    "pannable": true,
+    "classes": ""
+  },
+  {
+    "data": {
+      "id": "weatherRecordedBy",
+      "caption": "Weather Recorded By",
+      "label": "Weather Recorded By",
+      "source": "WeatherStation",
+      "target": "WeatherObservation"
+    },
+    "position": {
+      "x": 0,
+      "y": 0
+    },
+    "group": "edges",
+    "removed": false,
+    "selected": false,
+    "selectable": true,
+    "locked": false,
+    "grabbable": true,
+    "pannable": true,
+    "classes": ""
+  },
+  {
+    "data": {
+      "id": "hasRotation",
+      "caption": "Has Rotation",
+      "label": "Has Rotation",
+      "source": "Treatment",
+      "target": "Rotation"
+    },
+    "position": {
+      "x": 0,
+      "y": 0
+    },
+    "group": "edges",
+    "removed": false,
+    "selected": false,
+    "selectable": true,
+    "locked": false,
+    "grabbable": true,
+    "pannable": true,
+    "classes": ""
+  },
+  {
+    "data": {
+      "id": "happenedInSite",
+      "caption": "Happened In Site",
+      "label": "Happened In Site",
+      "source": "Experiment",
+      "target": "Site"
+    },
+    "position": {
+      "x": 0,
+      "y": 0
+    },
+    "group": "edges",
+    "removed": false,
+    "selected": false,
+    "selectable": true,
+    "locked": false,
+    "grabbable": true,
+    "pannable": true,
+    "classes": ""
+  },
+  {
+    "data": {
+      "id": "hasAmendment",
+      "caption": "Has Amendment",
+      "label": "Has Amendment",
+      "source": "ExperimentalUnit",
+      "target": "Amendment"
+    },
+    "position": {
+      "x": 0,
+      "y": 0
+    },
+    "group": "edges",
+    "removed": false,
+    "selected": false,
+    "selectable": true,
+    "locked": false,
+    "grabbable": true,
+    "pannable": true,
+    "classes": ""
+  },
+  {
+    "data": {
+      "id": "waterQualityConcDataAt",
+      "caption": "Water Quality Conc Data At",
+      "label": "Water Quality Conc Data At",
+      "source": "WaterQualityConc",
+      "target": "Field"
+    },
+    "position": {
+      "x": 0,
+      "y": 0
+    },
+    "group": "edges",
+    "removed": false,
+    "selected": false,
+    "selectable": true,
+    "locked": false,
+    "grabbable": true,
+    "pannable": true,
+    "classes": ""
+  },
+  {
+    "data": {
+      "id": "hasPesticide",
+      "caption": "Has Pesticide",
+      "label": "Has Pesticide",
+      "source": "Amendment",
+      "target": "Pesticide"
+    },
+    "position": {
+      "x": 0,
+      "y": 0
+    },
+    "group": "edges",
+    "removed": false,
+    "selected": false,
+    "selectable": true,
+    "locked": false,
+    "grabbable": true,
+    "pannable": true,
+    "classes": ""
+  },
+  {
+    "data": {
+      "id": "hasGasSample",
+      "caption": "Has Gas Sample",
+      "label": "Has Gas Sample",
+      "source": "ExperimentalUnit",
+      "target": "GasSample"
+    },
+    "position": {
+      "x": 0,
+      "y": 0
+    },
+    "group": "edges",
+    "removed": false,
+    "selected": false,
+    "selectable": true,
+    "locked": false,
+    "grabbable": true,
+    "pannable": true,
+    "classes": ""
+  },
+  {
+    "data": {
+      "id": "weatherRecordedAt",
+      "caption": "Weather Recorded At",
+      "label": "Weather Recorded At",
+      "source": "WeatherObservation",
+      "target": "Site"
+    },
+    "position": {
+      "x": 0,
+      "y": 0
+    },
+    "group": "edges",
+    "removed": false,
+    "selected": false,
+    "selectable": true,
+    "locked": false,
+    "grabbable": true,
+    "pannable": true,
+    "classes": ""
+  },
+  {
+    "data": {
+      "id": "recordsWeatherForField",
+      "caption": "Records Weather For Field",
+      "label": "Records Weather For Field",
+      "source": "WeatherStation",
+      "target": "Field"
+    },
+    "position": {
+      "x": 0,
+      "y": 0
+    },
+    "group": "edges",
+    "removed": false,
+    "selected": false,
+    "selectable": true,
+    "locked": false,
+    "grabbable": true,
+    "pannable": true,
+    "classes": ""
+  },
+  {
+    "data": {
+      "id": "hasWaterQualityAreaData",
+      "caption": "Has Water Quality Area Data",
+      "label": "Has Water Quality Area Data",
+      "source": "WaterQualityArea",
+      "target": "ExperimentalUnit"
+    },
+    "position": {
+      "x": 0,
+      "y": 0
+    },
+    "group": "edges",
+    "removed": false,
+    "selected": false,
+    "selectable": true,
+    "locked": false,
+    "grabbable": true,
+    "pannable": true,
+    "classes": ""
+  },
+  {
+    "data": {
+      "id": "locatedInCountry",
+      "caption": "Located In Country",
+      "label": "Located In Country",
+      "source": "Site",
+      "target": "Country"
+    },
+    "position": {
+      "x": 0,
+      "y": 0
+    },
+    "group": "edges",
+    "removed": false,
+    "selected": false,
+    "selectable": true,
+    "locked": false,
+    "grabbable": true,
+    "pannable": true,
+    "classes": ""
+  },
+  {
+    "data": {
+      "id": "waterQualityConcTreatment",
+      "caption": "Water Quality Conc Treatment",
+      "label": "Water Quality Conc Treatment",
+      "source": "WaterQualityConc",
+      "target": "Treatment"
+    },
+    "position": {
+      "x": 0,
+      "y": 0
+    },
+    "group": "edges",
+    "removed": false,
+    "selected": false,
+    "selectable": true,
+    "locked": false,
+    "grabbable": true,
+    "pannable": true,
+    "classes": ""
+  },
+  {
+    "data": {
+      "id": "waterQualityAreaTreatment",
+      "caption": "Water Quality Area Treatment",
+      "label": "Water Quality Area Treatment",
+      "source": "WaterQualityArea",
+      "target": "Treatment"
+    },
+    "position": {
+      "x": 0,
+      "y": 0
+    },
+    "group": "edges",
+    "removed": false,
+    "selected": false,
+    "selectable": true,
+    "locked": false,
+    "grabbable": true,
+    "pannable": true,
+    "classes": ""
+  },
+  {
+    "data": {
+      "id": "hasTillage",
+      "caption": "Has Tillage",
+      "label": "Has Tillage",
+      "source": "ExperimentalUnit",
+      "target": "Tillage"
+    },
+    "position": {
+      "x": 0,
+      "y": 0
+    },
+    "group": "edges",
+    "removed": false,
+    "selected": false,
+    "selectable": true,
+    "locked": false,
+    "grabbable": true,
+    "pannable": true,
+    "classes": ""
+  },
+  {
+    "data": {
+      "id": "locatedInField",
+      "caption": "Located In Field",
+      "label": "Located In Field",
+      "source": "ExperimentalUnit",
+      "target": "Field"
+    },
+    "position": {
+      "x": 0,
+      "y": 0
+    },
+    "group": "edges",
+    "removed": false,
+    "selected": false,
+    "selectable": true,
+    "locked": false,
+    "grabbable": true,
+    "pannable": true,
+    "classes": ""
+  },
+  {
+    "data": {
+      "id": "hasField",
+      "caption": "Has Field",
+      "label": "Has Field",
+      "source": "Site",
+      "target": "Field"
+    },
+    "position": {
+      "x": 0,
+      "y": 0
+    },
+    "group": "edges",
+    "removed": false,
+    "selected": false,
+    "selectable": true,
+    "locked": false,
+    "grabbable": true,
+    "pannable": true,
+    "classes": ""
+  }
+]
