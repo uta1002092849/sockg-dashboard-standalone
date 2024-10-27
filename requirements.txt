@@ -3,3 +3,4 @@ streamlit == 1.37.0
 plotly == 5.19.0
 st_link_analysis
 SPARQLWrapper
+htbuilder
