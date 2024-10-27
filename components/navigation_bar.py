@@ -1,10 +1,11 @@
 import streamlit as st
 
-def navition_bar():
+def navigation_bar():
     st.sidebar.title("Navigation")
+    st.logo("https://idir.uta.edu/sockg/static/img/sockg_logo_transparent.png")
     with st.sidebar:
         # Group pages into home, explorers, and text2cypher
-        with st.expander("Home Page", expanded=True):
+        with st.container(border=True):
             st.page_link("dashboard.py", label="Home", icon="🏡")
         
         with st.expander("Data Exploration", expanded=True):
@@ -17,7 +18,7 @@ def navition_bar():
         # with st.expander("Natural Language Decode", expanded=True):
         #     st.page_link("pages/_Text2Cypher.py", label="Text2Cypher", icon="⌨️")
         
-        with st.expander("Ontology Exploration", expanded=True):
+        with st.container(border=True):
             st.page_link("pages/_Ontology.py", label="Ontology Explorer", icon="📡")
-        with st.expander("Feedback", expanded=True):
+        with st.container(border=True):
             st.page_link("pages/_Feedback.py", label="Feedback", icon="📝")
