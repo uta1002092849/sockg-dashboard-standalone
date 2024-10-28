@@ -4,3 +4,11 @@ plotly == 5.19.0
 st_link_analysis
 SPARQLWrapper
 htbuilder
+langchain == 0.2.1
+neo4j_driver == 5.20.0
+langchain_google_genai == 1.0.5
+langchain-community == 0.2.1
+langchainhub == 0.1.17
+pandas == 1.5.3
+ollama ==0.2.1
+langchain-chroma == 0.1.1
