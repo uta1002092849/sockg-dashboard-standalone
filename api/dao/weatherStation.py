@@ -19,17 +19,13 @@ class weatherStationDAO:
     def get_weather_station_info(self, weatherStation_id):
     
         def get_weather_station_info(tx):
-            cypher = """MATCH (w:WeatherStation {weatherStationId: $weatherStation_id})
-                        RETURN
-                            w.weatherStationLatitude_decimal_deg as Latitude,
-                            w.weatherStationLongitude_decimal_deg as Longitude,
-                            w.weatherStationStartDate as Start_Date,
-                            w.weatherStationDirectionFromField_m as Direction_From_Field,
-                            w.weatherStationDistanceFromField as Distance_From_Field
-                        """
-            result = tx.run(cypher, weatherStation_id=weatherStation_id)
-            return result.to_df()
-        
+                cypher = """MATCH (u:WeatherStation {weatherStationId: $weatherStation_id})
+                            WITH u, keys(u) AS keys
+                            UNWIND keys AS key
+                            RETURN key, apoc.map.get(u, key) AS property"""
+                result = tx.run(cypher, weatherStation_id=weatherStation_id)
+                return result.to_df()
+            
         with self.driver.session() as session:
             return session.execute_read(get_weather_station_info)
     
