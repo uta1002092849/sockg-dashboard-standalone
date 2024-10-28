@@ -2,7 +2,7 @@ from api.neo4j import init_driver
 import streamlit as st
 from api.dao.weatherStation import weatherStationDAO
 import pandas as pd
-from components.navigation_bar import navition_bar
+from components.navigation_bar import navigation_bar
 from components.get_pydeck_chart import get_pydeck_chart
 
 driver = init_driver()
@@ -10,18 +10,20 @@ driver = init_driver()
 st.set_page_config(layout="wide", page_title="Weather Station View", page_icon=":thermometer:")
 
 # sidebar for navigation
-navition_bar()
+navigation_bar()
 
 # Custom CSS to improve appearance
+# Custom CSS for styling the display box
 st.markdown("""
     <style>
-    .big-font {
-        font-size:30px !important;
-        font-weight: bold;
-    }
-    .medium-font {
-        font-size:20px !important;
-        font-weight: bold;
+    .info-box {
+        padding: 10px;
+        background-color: #f0f4ff;
+        border-radius: 10px;
+        font-size: 19px;
+        color: #3b3b3b;
+        text-align: center;
+        font-weight: normal;
     }
     </style>
     """, unsafe_allow_html=True)
@@ -56,37 +58,24 @@ if st.session_state.selected_weather_station is None:
     st.stop()
 
 # Main content
-col1, col2 = st.columns([2, 3], vertical_alignment="top")
 weather_station_info = weather_station_dao.get_weather_station_info(st.session_state.selected_weather_station)
 
-with col1:
-    st.markdown('<p class="medium-font">Weather Station Information</p>', unsafe_allow_html=True)
-    located_field = weather_station_dao.get_field(st.session_state.selected_weather_station)['Field_Name'].to_list()
-    located_site = weather_station_dao.get_site(st.session_state.selected_weather_station)['Site_Name'].to_list()
+weather_station_des = ""
 
-    # Display weather station information
-    weather_station_des = ""
-    if 'selected_weather_station' in st.session_state:
-        weather_station_des += f"**Weather Station ID:** {st.session_state['selected_weather_station']}  \n"
-    # iterate over all columns in weather_station_info
-    for column in weather_station_info.columns:
-        if not weather_station_info[column].empty and str(weather_station_info[column][0]) != "nan" and str(weather_station_info[column][0]) != "None":
-            weather_station_des += f"**{column}:** {weather_station_info[column][0]}  \n"
-    st.info(weather_station_des)
+# Replace NaN in 'property' column with 'Not Available'
+weather_station_info['property'] = weather_station_info['property'].fillna('Not Available')
 
-with col2:
-    st.markdown('<p class="medium-font">Weather Station Location</p>', unsafe_allow_html=True)
-    # st.map(weather_station_info, latitude='Latitude', longitude='Longitude')
-    
-    # extract latitude and longitude
-    latitude = weather_station_info['Latitude'].values[0]
-    longitude = weather_station_info['Longitude'].values[0]
-    
-    # Check if latitude and longitude are not null
-    if pd.isnull(latitude) or pd.isnull(longitude):
-        st.info("Latitude and Longitude are not available for this weather station.")
-    else:
-        st.pydeck_chart(get_pydeck_chart(longitude, latitude))
+# Ensure all fields in 'field_info' are strings
+weather_station_info = weather_station_info.astype(str)
+
+# Construct the field description from each row in 'field_info'
+for _, row in weather_station_info.iterrows():
+    weather_station_des += f"**{row['key']}:** {row['property']}  \n"
+
+# Display the constructed field description
+st.info(weather_station_des)
+
+st.divider()
 
 # Get weather observations of a weather station
 weather_observation_df = weather_station_dao.get_weather_observation(st.session_state.selected_weather_station)
@@ -96,20 +85,18 @@ if weather_observation_df.empty:
     st.error("No weather observation data found for this weather station.")
     st.stop()
 
+st.markdown(f'<div class="info-box">You can also Select Date Range</div>', unsafe_allow_html=True)
+st.write("")
 # Convert 'Date' column to datetime
 weather_observation_df['Date'] = pd.to_datetime(weather_observation_df['date'], format='%Y-%m-%d')
-
 # Add separate date inputs for start and end dates
 min_date = weather_observation_df['Date'].min()
-
 # set max date to one year after min date
 max_date = weather_observation_df['Date'].max()
-
 
 # set default date to min date and one year after min date
 if 'date_range' not in st.session_state:
     st.session_state.date_range = None
-
 # Two date inputs for start and end dates
 option = st.date_input(
         "**Select date range:**",
@@ -117,6 +104,7 @@ option = st.date_input(
         min_value=min_date,
         max_value=max_date,
         format="YYYY-MM-DD",
+        label_visibility="collapsed"
     )
 
 if len(option) != 2:
@@ -130,108 +118,29 @@ filtered_df = weather_observation_df[mask]
 
 st.dataframe(filtered_df, use_container_width=True)
 
-# Function to create Streamlit charts
-def create_streamlit_chart(df, x, y, title):
-    st.subheader(title)
-    st.line_chart(df.set_index(x)[y])
+# 3 columns to select x-ais, multiple y-axis and plot type
+st.markdown('<div class="info-box">You can also visualize the data on a 2D graph</div>', unsafe_allow_html=True)
+st.write("")
+x_axis, y_axis, plot_type = st.columns(3)
+with x_axis:
+    x_axis = st.selectbox("Select x-axis", filtered_df.columns, index=0)
+with y_axis:
+    y_axis = st.multiselect("Select y-axis", filtered_df.columns, default=[filtered_df.columns[1]])
+with plot_type:
+    plot_type = st.selectbox("Select plot type", ["line", "bar", "area", "scatter"], index=3)
 
-# Replace the existing chart creation and detailed view code with this:
-
-st.markdown('<p class="medium-font">Weather Observations</p>', unsafe_allow_html=True)
-
-chart1, chart2 = st.columns(2)
-
-with chart1:
-    # Open Pan Evaporation
-    st.subheader("Open Pan Evaporation")
-
-    # Check if 'openPanEvaporation_mm_per_d' column is available
-    if 'openPanEvaporation_mm_per_d' not in filtered_df.columns:
-        st.info("Open Pan Evaporation data is not available for this weather station.")
-    else:
-        tab1, tab2 = st.tabs(["Chart", "Data"])
-        with tab1:
-            st.line_chart(filtered_df.set_index('Date')['openPanEvaporation_mm_per_d'])
-        with tab2:
-            # get average of Open Pan Evaporation
-            avg_open_pan_evaporation = filtered_df['openPanEvaporation_mm_per_d'].mean()
-            st.metric("Average Open Pan Evaporation", f"{avg_open_pan_evaporation:.2f}")
-            st.dataframe(filtered_df[['Date', 'openPanEvaporation_mm_per_d']].style.highlight_max(axis=0), use_container_width=True, hide_index=True)
-
-    # Soil Temperature
-    st.subheader("Soil Temperature")
-    tab1, tab2 = st.tabs(["Chart", "Data"])
-
-    # Check if 'soilTemp5cm_degC' and 'soilTemp10cm_degC' columns are available
-    if 'soilTemp5cm_degC' not in filtered_df.columns or 'soilTemp10cm_degC' not in filtered_df.columns:
-        st.info("Soil Temperature data is not available for this weather station.")
-    else:
-        # replace '' with zero
-        filtered_df['soilTemp5cm_degC'] = filtered_df['soilTemp5cm_degC'].replace('', 0)
-        filtered_df['soilTemp10cm_degC'] = filtered_df['soilTemp10cm_degC'].replace('', 0)
-
-        # Conver soil temperature columns to float
-        filtered_df['soilTemp5cm_degC'] = filtered_df['soilTemp5cm_degC'].astype(float)
-        filtered_df['soilTemp10cm_degC'] = filtered_df['soilTemp10cm_degC'].astype(float)
-        with tab1:
-            st.line_chart(filtered_df.set_index('Date')[['soilTemp5cm_degC', 'soilTemp10cm_degC']])
-        with tab2:
-            # get average of Soil Temperature
-            avg_soil_temperature_5cm = filtered_df['soilTemp5cm_degC'].mean()
-            avg_soil_temperature_10cm = filtered_df['soilTemp10cm_degC'].mean()
-            cols = st.columns(2)
-            with cols[0]:
-                st.metric("Average Soil Temperature 5cm", f"{avg_soil_temperature_5cm:.2f}")
-            with cols[1]:
-                st.metric("Average Soil Temperature 10cm", f"{avg_soil_temperature_10cm:.2f}")
-            st.dataframe(filtered_df[['Date', 'soilTemp5cm_degC', 'soilTemp10cm_degC']].style.highlight_max(axis=0), use_container_width=True, hide_index=True)
-
-# with chart2:
-#     # Precipitation and Relative Humidity
-#     st.subheader("Precipitation and Relative Humidity")
-#     tab1, tab2 = st.tabs(["Chart", "Data"])
-#     with tab1:
-#         st.line_chart(filtered_df.set_index('Date')[['Precipitation', 'Relative_Humidity_Percent']])
-#     with tab2:
-
-#         # get average of Precipitation and Relative Humidity
-#         avg_precipitation = filtered_df['Precipitation'].mean()
-#         avg_relative_humidity = filtered_df['Relative_Humidity_Percent'].mean()
-#         cols = st.columns(2)
-#         with cols[0]:
-#             st.metric("Average Precipitation", f"{avg_precipitation:.2f}")
-#         with cols[1]:
-#             st.metric("Average Relative Humidity", f"{avg_relative_humidity:.2f}")
-#         st.dataframe(filtered_df[['Date', 'Precipitation', 'Relative_Humidity_Percent']].style.highlight_max(axis=0), use_container_width=True, hide_index=True)
-
-#     # Solar Radiation and Temperature
-#     st.subheader("Solar Radiation and Temperature")
-#     tab1, tab2 = st.tabs(["Chart", "Data"])
-#     with tab1:
-#         st.line_chart(filtered_df.set_index('Date')[['Solar_Radiation_Bare_Soil', 'Min_Temperature', 'Max_Temperature']])
-#     with tab2:
-#         # get average of Solar Radiation and Temperature
-#         avg_solar_radiation = filtered_df['Solar_Radiation_Bare_Soil'].mean()
-#         avg_min_temperature = filtered_df['Min_Temperature'].mean()
-#         avg_max_temperature = filtered_df['Max_Temperature'].mean()
-#         cols = st.columns(3)
-#         with cols[0]:
-#             st.metric("Average Solar Radiation", f"{avg_solar_radiation:.2f}")
-#         with cols[1]:
-#             st.metric("Average Min Temperature", f"{avg_min_temperature:.2f}")
-#         with cols[2]:
-#             st.metric("Average Max Temperature", f"{avg_max_temperature:.2f}")
-#         st.dataframe(filtered_df[['Date', 'Solar_Radiation_Bare_Soil', 'Min_Temperature', 'Max_Temperature']].style.highlight_max(axis=0), use_container_width=True, hide_index=True)
-
-# # Wind Speed
-# st.subheader("Wind Speed")
-# tab1, tab2 = st.tabs(["Chart", "Data"])
-# with tab1:
-#     st.line_chart(filtered_df.set_index('Date')['Wind_Speed'])
-# with tab2:
-#     # get average of Wind Speed
-#     avg_wind_speed = filtered_df['Wind_Speed'].mean()
-#     st.metric("Average Wind Speed", f"{avg_wind_speed:.2f}")
-#     st.dataframe(filtered_df[['Date', 'Wind_Speed']].style.highlight_max(axis=0), use_container_width=True, hide_index=True)
-
-# Remove the final detailed view section
+# Check if y-axis is selected
+if y_axis:
+    try:
+        if plot_type == "line":
+            st.line_chart(filtered_df, x=x_axis, y=y_axis, use_container_width=True)
+        elif plot_type == "bar":
+            st.bar_chart(filtered_df, x=x_axis, y=y_axis, use_container_width=True)
+        elif plot_type == "area":
+            st.area_chart(filtered_df, x=x_axis, y=y_axis, use_container_width=True)
+        elif plot_type == "scatter":
+            st.scatter_chart(filtered_df, x=x_axis, y=y_axis, use_container_width=True)
+        else:
+            st.info("Please select a plot type to display the data.")
+    except Exception as e:
+        st.info("Something went wrong. Please select a different x-axis or y-axis to display the data.")
