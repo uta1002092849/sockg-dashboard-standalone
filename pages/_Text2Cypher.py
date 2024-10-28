@@ -3,7 +3,9 @@ from tools.text2cypher import generate_cypher
 from api.dao.general import GeneralDAO
 from tools.rating import save_ratings
 from api.neo4j import init_driver
-from components.navigation_bar import navition_bar
+from components.navigation_bar import navigation_bar
+
+
 driver = init_driver()
 state = st.session_state
 
@@ -11,7 +13,7 @@ state = st.session_state
 st.set_page_config(layout="wide", page_title="Text2Cypher View", page_icon=":keyboard:")
 
 # sidebar for navigation
-navition_bar()
+navigation_bar()
 
 def upvote_callback():
     save_ratings(state['user_input'], state['cypher_code'], "up")
