@@ -337,7 +337,7 @@ if selected_exp_unit or st.session_state.selected_exp_unit:
     # Filter to further narrow down the experimental units event to display
     st.markdown('<div class="info-box"> Select any data property to view more details</div>', unsafe_allow_html=True)
     st.write("")
-    event_name = st.selectbox("Select a data property for detail view", events, format_func=camel_snake_to_normal, index=None, label_visibility='collapsed')
+    event_name = st.selectbox("Select a data property for detail view", events, format_func=camel_snake_to_normal, index=0, label_visibility='collapsed')
 
     # Check if event name is selected
     if event_name:
@@ -350,11 +350,11 @@ if selected_exp_unit or st.session_state.selected_exp_unit:
         st.write("")
         x_axis, y_axis, plot_type = st.columns(3)
         with x_axis:
-            x_axis = st.selectbox("Select x-axis", data.columns)
+            x_axis = st.selectbox("Select x-axis", data.columns, index=0)
         with y_axis:
-            y_axis = st.multiselect("Select y-axis", data.columns)
+            y_axis = st.multiselect("Select y-axis", data.columns, default=[data.columns[1]])
         with plot_type:
-            plot_type = st.selectbox("Select plot type", ["line", "bar", "area", "scatter"])
+            plot_type = st.selectbox("Select plot type", ["line", "bar", "area", "scatter"], index=3)
         
         # Check if y-axis is selected
         if y_axis:
