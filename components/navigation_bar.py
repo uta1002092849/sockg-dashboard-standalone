@@ -14,8 +14,8 @@ def navigation_bar():
             st.page_link("pages/_Treatments.py", label="Treatment Explorer", icon="💊")
             st.page_link("pages/_WeatherStations.py", label="Weather Station Explorer", icon="🌡️")
         
-        with st.expander("Natural Language Querying", expanded=True):
-            st.page_link("pages/_Text2Cypher.py", label="Text2Cypher", icon="⌨️")
+        # with st.expander("Natural Language Querying", expanded=True):
+        #     st.page_link("pages/_Text2Cypher.py", label="Text2Cypher", icon="⌨️")
         
         with st.container(border=True):
             st.page_link("pages/_Ontology.py", label="Ontology Explorer", icon="📡")
